@@ -4,13 +4,12 @@ public class FindClientCommand implements Command{
 
 	@Override
 	public void printCommandInfo() {
-		System.out.println("Find Client: ");
-		System.out.println();
-		
+		System.out.println("1 - Find Client: ");
 	}
 	
 	@Override
 	public void execute() {
+
 		
 	}
 	
