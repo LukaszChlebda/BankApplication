@@ -53,11 +53,11 @@ public class BankApplication {
 		} catch (ClientExistsException e) {
 			System.out.println(e.getMessage());
 		}
-        bService.addAccount(client1,savingAccount1);
-        bService.addAccount(client1,checkingAccount);
+        bService.addAccount(client1, savingAccount1);
         bService.addAccount(client1, checkingAccount);
-        bService.addAccount(client2,savingAccount1);
-        bService.addAccount(client2,checkingAccount);
+        bService.addAccount(client1, checkingAccount);
+        bService.addAccount(client2, savingAccount1);
+        bService.addAccount(client2, checkingAccount);
         bService.addAccount(client3, savingAccount2);
         bService.addAccount(client3, checkingAccount);
         bService.addAccount(client4, savingAccount2);

@@ -6,6 +6,7 @@ import com.luxoft.bankapp.exceptions.*;
 import java.lang.instrument.UnmodifiableClassException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 
 import org.omg.CORBA.IMP_LIMIT;
@@ -23,7 +24,8 @@ public class Bank implements Report{
 	}
 	
 	public List<Client> getClients() {
-		return Collections.unmodifiableList(clients); 
+		//return Collections.unmodifiableList(clients);
+		return clients;
 	}
 	
 	class PrintClientListener implements ClientRegistrationListener {
@@ -54,8 +56,20 @@ public class Bank implements Report{
         registrationListener.add(actionListener);
     }
 
-    public Client getClient(int index) {
-        return clients.get(index);
+	public Client getClient(int index) {
+		return clients.get(index);
+	}
+
+    public Client getClient(String name) {
+		Iterator<Client> iterator = clients.iterator();
+		Client clientFound = null;
+
+		while(iterator.hasNext()) {
+			if(iterator.next().getName().equals(name)) {
+				clientFound = (Client) iterator;
+			}
+		}
+        return clientFound;
     }
 	
 	public void addClient(Bank bank, Client client) throws ClientExistsException{

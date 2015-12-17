@@ -1,6 +1,7 @@
 package com.luxoft.bankapp.service;
 
 import com.luxoft.bankapp.exceptions.ClientExistsException;
+import com.luxoft.bankapp.exceptions.ClientNotFoundException;
 import com.luxoft.bankapp.model.*;
 
 public interface BankService {
@@ -9,4 +10,6 @@ public interface BankService {
     public void removeClient(Bank bank, Client client);
     public void addAccount(Client client, Account account);
     public void setActiveAccoutn(Client client, Account account);
+    public Client getClient(Bank bank, String clientName) throws ClientNotFoundException;
+    public Client findClient(Bank bank, String clientName);
 }
