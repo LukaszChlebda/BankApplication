@@ -24,8 +24,8 @@ public class Bank implements Report{
 	}
 	
 	public List<Client> getClients() {
-		//return Collections.unmodifiableList(clients);
-		return clients;
+		return Collections.unmodifiableList(clients);
+		//return clients;
 	}
 	
 	class PrintClientListener implements ClientRegistrationListener {
@@ -58,6 +58,10 @@ public class Bank implements Report{
 
 	public Client getClient(int index) {
 		return clients.get(index);
+	}
+
+	public boolean removeClient(Client client) {
+		return clients.remove(client);
 	}
 
     public Client getClient(String name) {

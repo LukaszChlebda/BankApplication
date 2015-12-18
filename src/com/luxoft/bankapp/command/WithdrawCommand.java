@@ -4,7 +4,7 @@ public class WithdrawCommand implements Command{
 
 	@Override
 	public void execute() {
-		// TODO Auto-generated method stub
+		System.out.println("Withdraw : ");
 		
 	}
 

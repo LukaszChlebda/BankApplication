@@ -16,7 +16,7 @@ public class BankServiceImpl implements BankService {
     @Override
     public void removeClient(Bank bank, Client client) {
 
-        if(bank.getClients().remove(client)) {
+        if(bank.removeClient(client)) {
             System.out.println("Client removed ");
         }
         else {
@@ -36,15 +36,7 @@ public class BankServiceImpl implements BankService {
 
     @Override
     public Client getClient(Bank bank, String clientName) throws ClientNotFoundException {
-//        Iterator<Client> iterator = (Iterator<Client>) bank.getClients();
-//        int index;
-//        while (iterator.hasNext()) {
-//            if(iterator.next().getName().equals(clientName)) {
-//                return (Client)iterator.next();
-//            }else {
-//                throw new ClientNotFoundException(clientName);
-//            }
-//        }
+
         boolean flag = true;
         Client clientToReturn = new Client("Lukasz1", Gender.MALE);
         int index=0;
@@ -56,11 +48,6 @@ public class BankServiceImpl implements BankService {
                 throw new ClientNotFoundException(clientName);
             }
         }
-        return null;
-    }
-
-    @Override
-    public Client findClient(Bank bank, String clientName) {
         return null;
     }
 }

@@ -16,7 +16,7 @@ public class AddClientCommand implements Command {
 	}
 	@Override
 	public void printCommandInfo() {
-		// TODO Auto-generated method stub
+		System.out.println("Add new client: ");
 
 	}
 

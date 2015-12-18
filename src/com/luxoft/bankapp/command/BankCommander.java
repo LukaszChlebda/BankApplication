@@ -15,10 +15,16 @@ import java.util.Scanner;
  */
 public class BankCommander {
 
+
+
     static Command[] commands = {
-           // new AddClientCommand(currentBank),
-          //  new FindClientCommand(currentBank),
+
+            //new FindClientCommand(currentBank),
             new GetAccountsCommand(),
+            new WithdrawCommand(),
+            new DepositCommand(),
+            new TransferComand(),
+            // new AddClientCommand(currentBank),
             new Command() {
                 public void execute() {
                     System.exit(0);
@@ -30,25 +36,11 @@ public class BankCommander {
     };
 
     public static void main(String[] args) {
-        Bank currentBank = new Bank();
 
-        BankService bankService = new BankServiceImpl();
-        Client client = new Client("Lukasz", Gender.MALE);
-        SavingAccount savingAccount1 = new SavingAccount(1000);
-        SavingAccount savingAccount2 = new SavingAccount(1000);
-
-
-        try {
-            bankService.addClient(currentBank, client);
-        }catch(ClientExistsException e) {
-            System.out.println(e.getMessage());
-        }
-        //currentBank = bankService
-        //currentBank.addClient();
-        //client.addAccount();
 
         Scanner readUserInput = new Scanner(System.in);
-        while (true) {
+        boolean flag = true;
+        while (flag) {
             for (int i = 0; i < commands.length; i++) {
                 System.out.print(i+") ");
                 commands[i].printCommandInfo();
@@ -58,5 +50,4 @@ public class BankCommander {
             commands[commandString].execute();
         }
     }
-
 }
