@@ -18,6 +18,7 @@ public class Client implements Report {
         accounts = new ArrayList<>();
         this.name = name;
         this.gender = gender;
+
     }
 
     public Client(String name, Gender gender,  float initialOverdraft) {
@@ -25,6 +26,7 @@ public class Client implements Report {
         this.name = name;
         this.initialOverdraft = initialOverdraft;
         this.gender = gender;
+
     }
 
     @Override

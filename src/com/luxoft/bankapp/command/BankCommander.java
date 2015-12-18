@@ -15,16 +15,17 @@ import java.util.Scanner;
  */
 public class BankCommander {
 
-
+    static Bank currentBank = new Bank();
 
     static Command[] commands = {
 
-            //new FindClientCommand(currentBank),
+            new FindClientCommand(currentBank),
             new GetAccountsCommand(),
             new WithdrawCommand(),
             new DepositCommand(),
             new TransferComand(),
-            // new AddClientCommand(currentBank),
+            new AddClientCommand(currentBank),
+            new DispClientsTestCLass(currentBank),
             new Command() {
                 public void execute() {
                     System.exit(0);
@@ -36,18 +37,15 @@ public class BankCommander {
     };
 
     public static void main(String[] args) {
-
-
         Scanner readUserInput = new Scanner(System.in);
         boolean flag = true;
         while (flag) {
             for (int i = 0; i < commands.length; i++) {
-                System.out.print(i+") ");
+                System.out.print(i + ") ");
                 commands[i].printCommandInfo();
             }
-            int commandString = readUserInput.nextInt();
-            int command=0; // initialize command with commandString
-            commands[commandString].execute();
+            int command = readUserInput.nextInt();
+            commands[command].execute();
         }
     }
 }

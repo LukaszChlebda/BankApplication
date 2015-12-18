@@ -3,8 +3,6 @@ package com.luxoft.bankapp.exceptions;
 import com.luxoft.bankapp.model.Account;
 import com.luxoft.bankapp.model.CheckingAccount;
 
-import javax.xml.ws.handler.MessageContext;
-
 import com.luxoft.bankapp.model.*;
 
 public class OverDraftLimitExceededException extends NotEnoughtFundsException{

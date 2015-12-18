@@ -1,8 +1,5 @@
 package com.luxoft.bankapp.model;
 
-import java.io.NotActiveException;
-import java.nio.channels.OverlappingFileLockException;
-
 import com.luxoft.bankapp.exceptions.NotEnoughtFundsException;
 
 

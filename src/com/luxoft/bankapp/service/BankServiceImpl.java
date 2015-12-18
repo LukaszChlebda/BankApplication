@@ -3,9 +3,6 @@ package com.luxoft.bankapp.service;
 import com.luxoft.bankapp.exceptions.ClientExistsException;
 import com.luxoft.bankapp.exceptions.ClientNotFoundException;
 import com.luxoft.bankapp.model.*;
-import com.sun.xml.internal.bind.v2.runtime.reflect.Lister;
-
-import java.util.Iterator;
 
 public class BankServiceImpl implements BankService {
     @Override
@@ -16,10 +13,9 @@ public class BankServiceImpl implements BankService {
     @Override
     public void removeClient(Bank bank, Client client) {
 
-        if(bank.removeClient(client)) {
+        if (bank.removeClient(client)) {
             System.out.println("Client removed ");
-        }
-        else {
+        } else {
             System.out.println("No client to remove ");
         }
     }
@@ -38,16 +34,23 @@ public class BankServiceImpl implements BankService {
     public Client getClient(Bank bank, String clientName) throws ClientNotFoundException {
 
         boolean flag = true;
-        Client clientToReturn = new Client("Lukasz1", Gender.MALE);
-        int index=0;
-        while(flag){
-            if (bank.getClients().get(index).equals(clientName)) {
-                return clientToReturn = bank.getClients().get(index);
+        int index = 0;
+        Client clientFound = null;
 
-            } else {
-                throw new ClientNotFoundException(clientName);
+        while (flag && index < bank.getClients().size()) {
+            try {
+                if (bank.getClients().get(index).getName().equals(clientName)) {
+                    clientFound = bank.getClient(index);
+                    flag = false;
+                }
+
+                index++;
+
+            } catch (ClientNotFoundException e) {
+                System.out.println(e.getMessage());
             }
+
         }
-        return null;
+        return clientFound;
     }
 }

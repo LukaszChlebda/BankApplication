@@ -2,14 +2,11 @@ package com.luxoft.bankapp.model;
 
 import com.luxoft.bankapp.service.*;
 import com.luxoft.bankapp.exceptions.*;
-
-import java.lang.instrument.UnmodifiableClassException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
-import org.omg.CORBA.IMP_LIMIT;
 
 public class Bank implements Report{
 
@@ -25,7 +22,7 @@ public class Bank implements Report{
 	
 	public List<Client> getClients() {
 		return Collections.unmodifiableList(clients);
-		//return clients;
+
 	}
 	
 	class PrintClientListener implements ClientRegistrationListener {
@@ -56,7 +53,7 @@ public class Bank implements Report{
         registrationListener.add(actionListener);
     }
 
-	public Client getClient(int index) {
+	public Client getClient(int index) throws ClientNotFoundException{
 		return clients.get(index);
 	}
 

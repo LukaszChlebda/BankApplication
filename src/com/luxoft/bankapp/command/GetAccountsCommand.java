@@ -13,6 +13,4 @@ public class GetAccountsCommand implements Command{
 		// TODO Auto-generated method stub
 		
 	}
-	
-
 }

@@ -1,6 +1,10 @@
 package com.luxoft.bankapp.command;
 
+import com.luxoft.bankapp.model.Bank;
+
 public class WithdrawCommand implements Command{
+
+	private Bank bank = new Bank();
 
 	@Override
 	public void execute() {
@@ -10,7 +14,9 @@ public class WithdrawCommand implements Command{
 
 	@Override
 	public void printCommandInfo() {
-		// TODO Auto-generated method stub
+		System.out.println("Withdraw");
+
+
 
 	}
 }

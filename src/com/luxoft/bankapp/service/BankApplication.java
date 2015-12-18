@@ -16,7 +16,8 @@ public class BankApplication {
         modifyBank(bank);
         printBankReport(bank);
 
-        bService.removeClient(bank, bank.getClient(1));
+
+        //bService.removeClient(bank, bank.getClient(1));
         printBankReport(bank);
 	}
 	
@@ -71,20 +72,20 @@ public class BankApplication {
         Random rand = new Random();
         for(int i=0; i<bank.getClients().size(); i++) {
             
-            bank.getClient(i).getAccounts().get(0).deposit(5000);
-            bank.getClient(i).getAccounts().get(1).deposit(8000);
-           
-            try {
-            	bank.getClient(i).getAccounts().get(0).withdraw(6000);
-            }catch(NotEnoughtFundsException e) {
-            	System.out.println(e.getMessage());
-            }
-            
-            try {
-            	bank.getClient(i).getAccounts().get(1).withdraw(11000);
-            }catch(OverDraftLimitExceededException e) {
-            	System.out.println(e.getMessage());
-            }
+//            bank.getClient(i).getAccounts().get(0).deposit(5000);
+//            bank.getClient(i).getAccounts().get(1).deposit(8000);
+//
+//            try {
+//            	bank.getClient(i).getAccounts().get(0).withdraw(6000);
+//            }catch(NotEnoughtFundsException e) {
+//            	System.out.println(e.getMessage());
+//            }
+//
+//            try {
+//            	bank.getClient(i).getAccounts().get(1).withdraw(11000);
+//            }catch(OverDraftLimitExceededException e) {
+//            	System.out.println(e.getMessage());
+//            }
             
         }
 	}

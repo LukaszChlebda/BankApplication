@@ -3,14 +3,15 @@ package com.luxoft.bankapp.command;
 import com.luxoft.bankapp.exceptions.ClientExistsException;
 import com.luxoft.bankapp.exceptions.ClientNotFoundException;
 import com.luxoft.bankapp.model.Bank;
+import com.luxoft.bankapp.model.Client;
+import com.luxoft.bankapp.service.BankService;
 import com.luxoft.bankapp.service.BankServiceImpl;
 
-import java.util.InputMismatchException;
 import java.util.Scanner;
 
 
 public class FindClientCommand implements Command{
-    Bank currentBank = null;
+    private Bank currentBank = null;
 
     public FindClientCommand(Bank currentBank) {
         this.currentBank = currentBank;
@@ -24,23 +25,26 @@ public class FindClientCommand implements Command{
 	
 	@Override
 	public void execute() {
-        BankServiceImpl bankServiceImpl = new BankServiceImpl();
+        BankService bankServiceImpl = new BankServiceImpl();
         Scanner sc = new Scanner(System.in);
         boolean flag = true;
         String clientToFind = null;
+        Client client = null;
         System.out.println("Type name of client to find ");
-        //while(flag) {
-            //try {
+
                 clientToFind = sc.nextLine();
-              //  flag = false;
-            //}catch (InputMismatchException e) {
-            //    System.out.println(e.getMessage());
-           // }
-        //}
+
         try {
-            bankServiceImpl.getClient(currentBank, clientToFind);
+            client = bankServiceImpl.getClient(currentBank, clientToFind);
         }catch (ClientNotFoundException e) {
             System.out.println(e.getMessage());
+        }
+
+        if(currentBank.getClients().size()>0) {
+            System.out.println(currentBank.getClients().size());
+            client.printReport();
+        }else {
+            System.out.println("No clients ");
         }
 
     }
