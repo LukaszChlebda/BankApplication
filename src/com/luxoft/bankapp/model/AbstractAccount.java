@@ -6,15 +6,18 @@ public abstract class AbstractAccount implements Account {
 	private float balance;
 	
 	public AbstractAccount(float balance) throws IllegalArgumentException{
-		if(balance < 0) {
-			throw new IllegalArgumentException();
-		}
-		else {
-			this.balance = balance;
-		}
+//		if(balance < 0) {
+//			throw new IllegalArgumentException();
+//		}
+//		else {
+//			this.balance = balance;
+//		}
+
+		setBalance(balance);
 		
 	}
-	
+
+	@Override
 	public float getBalance() {
 		return balance;
 	}
@@ -30,7 +33,9 @@ public abstract class AbstractAccount implements Account {
 
     public abstract String getAccountInfo();
 
+	@Override
     public abstract void deposit(float x);
 
+	@Override
     public abstract void withdraw(float x) throws NotEnoughtFundsException;
 }

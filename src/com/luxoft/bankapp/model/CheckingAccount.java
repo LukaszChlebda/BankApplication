@@ -8,6 +8,7 @@ public class CheckingAccount extends AbstractAccount {
 
     private String accountInfo = "Account type: Checking account  balance: " + getBalance() 
     	+ ", overdraft: " + getOverdraft();
+
     private float overdraft;
 	
 	public CheckingAccount(float balance) {
@@ -16,7 +17,8 @@ public class CheckingAccount extends AbstractAccount {
 	
 	public CheckingAccount(float balance, float overdraft) {
 		super(balance);
-		this.overdraft = overdraft;
+		//this.overdraft = overdraft;
+		setOverdraft(overdraft);
 	}
 	
 

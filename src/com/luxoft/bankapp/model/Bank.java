@@ -39,7 +39,7 @@ public class Bank implements Report{
 
 		@Override
 		public void onClientAdded(Client client) {
-			System.out.println("Email for clent " + client.getName() + " to be sent ");
+			System.out.println("Email for client " + client.getName() + " to be sent ");
 			
 		}
 		
@@ -74,8 +74,6 @@ public class Bank implements Report{
     }
 	
 	public void addClient(Bank bank, Client client) throws ClientExistsException{
-		
-		
 		try {
             if (bank.getClients().indexOf(client) != -1) {
                 throw new ClientExistsException(client);
