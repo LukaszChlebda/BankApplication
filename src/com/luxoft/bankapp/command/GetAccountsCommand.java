@@ -4,13 +4,15 @@ public class GetAccountsCommand implements Command{
 
 	@Override
 	public void execute() {
-		System.out.println("Get accounts: ");
-		
+		if(BankCommander.currentClient != null) {
+			BankCommander.currentClient.printReport();
+		}else {
+			System.out.println("No active client, choose client first ");
+		}
 	}
 
 	@Override
 	public void printCommandInfo() {
-		// TODO Auto-generated method stub
-		
+		System.out.println("Get accounts ");
 	}
 }

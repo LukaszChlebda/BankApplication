@@ -6,55 +6,44 @@ import com.luxoft.bankapp.exceptions.OverDraftLimitExceededException;
 
 public class CheckingAccount extends AbstractAccount {
 
-    private String accountInfo = "Account type: Checking account  balance: " + getBalance() 
-    	+ ", overdraft: " + getOverdraft();
-
-    private float overdraft;
-	
 	public CheckingAccount(float balance) {
 		super(balance);
 	}
-	
+
 	public CheckingAccount(float balance, float overdraft) {
 		super(balance);
-		//this.overdraft = overdraft;
-		setOverdraft(overdraft);
+		if(overdraft < 0) {
+			throw new IllegalArgumentException();
+		}
+		this.overdraft = overdraft;
+		System.out.println("Overdraft test " + this.overdraft);
 	}
-	
+
+    private float overdraft;
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+
+		CheckingAccount that = (CheckingAccount) o;
+
+		return Float.compare(that.overdraft, overdraft) == 0;
+
+	}
 
 	@Override
 	public int hashCode() {
-		final int prime = 31;
-		int result = super.hashCode();
-		result = prime * result + ((accountInfo == null) ? 0 : accountInfo.hashCode());
-		result = prime * result + Float.floatToIntBits(overdraft);
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (!super.equals(obj))
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		CheckingAccount other = (CheckingAccount) obj;
-		if (accountInfo == null) {
-			if (other.accountInfo != null)
-				return false;
-		} else if (!accountInfo.equals(other.accountInfo))
-			return false;
-		if (Float.floatToIntBits(overdraft) != Float.floatToIntBits(other.overdraft))
-			return false;
-		return true;
+		return (overdraft != +0.0f ? Float.floatToIntBits(overdraft) : 0);
 	}
 
 	public void setOverdraft(float amount) throws IllegalArgumentException {
-		if(amount <0) {
+		if(amount < 0) {
 			throw new IllegalArgumentException();
-		}
+		}else {
+			System.out.println("New Overdraft has been set ");
 			this.overdraft = amount;
+		}
 	}
 	
 	public float getOverdraft() {
@@ -62,7 +51,7 @@ public class CheckingAccount extends AbstractAccount {
 	}
 
     public String getAccountInfo() {
-        return accountInfo;
+        return toString();
     }
 
     @Override
@@ -89,12 +78,11 @@ public class CheckingAccount extends AbstractAccount {
     }
 
     public void printReport() {
-        System.out.println(getAccountInfo());
+        System.out.println(toString());
     }
     
     public String toString() {
-    	return getAccountInfo();
+    	return "Checking account  balance: " + this.getBalance()
+			    + ", overdraft: " + this.getOverdraft();
     }
-
-	
 }

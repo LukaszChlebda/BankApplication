@@ -6,7 +6,7 @@ public class ClientExistsException extends Throwable{
 	private String message;
 	
 	public ClientExistsException(Client client) {
-		message = client.getClientSalutation() + client.getName() + " already exists in database ";
+		message = client.getClientSalutation() + client.getFirstName() + " already exists in database ";
 	}
 	
 	@Override

@@ -4,15 +4,13 @@ import com.luxoft.bankapp.exceptions.NotEnoughtFundsException;
 
 
 public class SavingAccount extends AbstractAccount {
-
-    private String  accountInfo = "Account type: Saving account  balance: " + getBalance();
 	
 	public SavingAccount(float balance){
 		super(balance);
 	}
 
     public String getAccountInfo() {
-        return this.accountInfo;
+        return toString();
     }
     
     @Override
@@ -36,11 +34,11 @@ public class SavingAccount extends AbstractAccount {
     }
 
     public void printReport() {
-        System.out.println();
+        System.out.println(toString());
     }
     
     public String toString() {
-    	return getAccountInfo();
+    	return "Saving account  balance: " + getBalance();
     }
 
 	

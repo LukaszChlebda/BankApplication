@@ -31,26 +31,8 @@ public class BankServiceImpl implements BankService {
     }
 
     @Override
-    public Client getClient(Bank bank, String clientName) throws ClientNotFoundException {
+    public Client getClient(Bank bank, String clientName, String clientSureName) throws ClientNotFoundException {
 
-        boolean flag = true;
-        int index = 0;
-        Client clientFound = null;
-
-        while (flag && index < bank.getClients().size()) {
-            try {
-                if (bank.getClients().get(index).getName().equals(clientName)) {
-                    clientFound = bank.getClient(index);
-                    flag = false;
-                }
-
-                index++;
-
-            } catch (ClientNotFoundException e) {
-                System.out.println(e.getMessage());
-            }
-
-        }
-        return clientFound;
+	    return bank.getClient(clientName, clientSureName);
     }
 }

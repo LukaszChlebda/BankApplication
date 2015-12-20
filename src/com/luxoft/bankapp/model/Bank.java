@@ -29,7 +29,7 @@ public class Bank implements Report{
 
 		@Override
 		public void onClientAdded(Client client) {
-			System.out.println("Client " + client.getName() + " added ");
+			System.out.println("Client " + client.getFirstName() + " added ");
 			
 		}
 		
@@ -39,7 +39,7 @@ public class Bank implements Report{
 
 		@Override
 		public void onClientAdded(Client client) {
-			System.out.println("Email for client " + client.getName() + " to be sent ");
+			System.out.println("Email for client " + client.getFirstName() + " to be sent ");
 			
 		}
 		
@@ -61,16 +61,21 @@ public class Bank implements Report{
 		return clients.remove(client);
 	}
 
-    public Client getClient(String name) {
-		Iterator<Client> iterator = clients.iterator();
-		Client clientFound = null;
+    public Client getClient(String name, String surName) throws ClientNotFoundException {
+	    boolean clientFoundFlag = false;
 
-		while(iterator.hasNext()) {
-			if(iterator.next().getName().equals(name)) {
-				clientFound = (Client) iterator;
-			}
-		}
-        return clientFound;
+	    for(Iterator<Client> iterator = clients.iterator(); iterator.hasNext(); ) {
+		    Client client = iterator.next();
+		    if((client.getName().equals(name)) && (client.getSureName().equals(surName))) {
+			    clientFoundFlag = true;
+			    return client;
+		    }
+	    }
+	    if(!clientFoundFlag) {
+		    throw new ClientNotFoundException("Client not found ");
+	    }
+	    return null;
+
     }
 	
 	public void addClient(Bank bank, Client client) throws ClientExistsException{
@@ -78,18 +83,15 @@ public class Bank implements Report{
             if (bank.getClients().indexOf(client) != -1) {
                 throw new ClientExistsException(client);
             } else {
-                bank.clients.add(client);
+	            bank.clients.add(client);
+	            for (int j = 0; j < getListeners().size(); j++) {
+		            bank.getListeners().get(j).onClientAdded(client);
+	            }
             }
         } catch (ClientExistsException e) {
-            e.getMessage();
-        } finally {
-        	for(int j=0; j<getListeners().size(); j++) {
-				bank.getListeners().get(j).onClientAdded(client);
-			}
+			System.out.println("Error client name: " + client.getFirstName() + " " + client.getSureName() + " already exists in database");
         }
 	}
-		
-		
 
 	@Override
 	public void printReport() {

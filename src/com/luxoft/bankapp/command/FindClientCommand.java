@@ -28,24 +28,27 @@ public class FindClientCommand implements Command{
         BankService bankServiceImpl = new BankServiceImpl();
         Scanner sc = new Scanner(System.in);
         boolean flag = true;
-        String clientToFind = null;
+        String clientToFindName = null, clientToFindSureName = null;
         Client client = null;
         System.out.println("Type name of client to find ");
+		clientToFindName = sc.next();
 
-                clientToFind = sc.nextLine();
+		System.out.println("Type name of client to find ");
+
+		clientToFindSureName = sc.next();
 
         try {
-            client = bankServiceImpl.getClient(currentBank, clientToFind);
+	        BankCommander.currentClient = bankServiceImpl.getClient(currentBank, clientToFindName, clientToFindSureName);
         }catch (ClientNotFoundException e) {
             System.out.println(e.getMessage());
         }
 
-        if(currentBank.getClients().size()>0) {
-            System.out.println(currentBank.getClients().size());
-            client.printReport();
-        }else {
-            System.out.println("No clients ");
-        }
+		if(BankCommander.currentClient != null) {
+			BankCommander.currentClient.printReport();
+			BankCommander.currentClient.setActiveAccount(BankCommander.currentClient.getAccounts().get(1));
+		}else {
+			System.out.println("No client ");
+		}
 
     }
 	

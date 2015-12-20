@@ -21,7 +21,6 @@ public class DispClientsTestCLass implements Command {
                System.out.println(e.getMessage());
            }
         }
-        System.out.println(bank.getClients().size());
     }
 
     @Override
