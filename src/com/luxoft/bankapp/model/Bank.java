@@ -72,7 +72,7 @@ public class Bank implements Report{
 		    }
 	    }
 	    if(!clientFoundFlag) {
-		    throw new ClientNotFoundException("Client not found ");
+		    throw new ClientNotFoundException("name ");
 	    }
 	    return null;
 
