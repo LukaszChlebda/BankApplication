@@ -13,7 +13,6 @@ public class TransferComand implements Command{
 	private Bank currentBank = null;
 	private BankService bankServiceImpl = new BankServiceImpl();
 	public TransferComand(Bank bank) {
-		//this.bankServiceImpl = bankServiceImpl;
 		this.currentBank = bank;
 	}
 
@@ -55,9 +54,6 @@ public class TransferComand implements Command{
 				}
 			}
 			if (doTransfer) {
-
-
-				//System.out.println("Enter name and surname of client you would like to transfer money (separate with space)");
 				System.out.println("Enter name ");
 				accountFirstNameToTransfer = sc.next();
 				System.out.println("Enter sure name ");
@@ -70,56 +66,54 @@ public class TransferComand implements Command{
 					clientToTransfer = bankServiceImpl.getClient(currentBank, accountFirstNameToTransfer, accountSureNameToTransfer);
 					clientToTransfer.printReport();
 				} catch (ClientNotFoundException e) {
-					//doTransfer = false;
+					doTransfer = false;
 					System.out.println(e.getMessage());
 
 				}
-
-				//clientToTransfer = bankServiceImpl.getClient(currentBank, accountFirstNameToTransfer, accountSureNameToTransfer);
-
-				System.out.println("Chose account from which you would like to transfer money \n0 - Saving Account \n1 - Checking account \n\n2 - exit");
-				flag = true;
-				while (flag) {
-					choseAccount = sc.nextInt();
-					switch (choseAccount) {
-						case 0:
-							//clientToTransfer.setActiveAccount(BankCommander.currentClient.getAccounts().get(0));
-							clientToTransfer.setActiveAccount(clientToTransfer.getAccounts().get(0));
-							doTransfer = true;
-							flag = false;
-							break;
-						case 1:
-							//clientToTransfer.setActiveAccount(BankCommander.currentClient.getAccounts().get(1));
-							clientToTransfer.setActiveAccount(clientToTransfer.getAccounts().get(1));
-							doTransfer = true;
-							flag = false;
-							break;
-						case 2:
-							doTransfer = false;
-							flag = false;
-							break;
-						default:
-							System.out.println("No option ");
-							break;
-					}
-				}
-
-				System.out.println("How much money you would like to transfer ");
-
-				flag = true;
-
-				while (flag && doTransfer) {
-					amountToTransfer = sc.nextFloat();
-
-					if (amountToTransfer > BankCommander.currentClient.getActiveAccount().getBalance()) {
-						throw new NotEnoughtFundsException();
-					} else {
-						clientToTransfer.getActiveAccount().deposit(amountToTransfer);
-						BankCommander.currentClient.getActiveAccount().withdraw(amountToTransfer);
-						System.out.println("Transfer succeed");
-						flag = false;
+				if(doTransfer) {
+					System.out.println("Chose account from which you would like to transfer money \n0 - Saving Account \n1 - Checking account \n\n2 - exit");
+					flag = true;
+					while (flag) {
+						choseAccount = sc.nextInt();
+						switch (choseAccount) {
+							case 0:
+								clientToTransfer.setActiveAccount(clientToTransfer.getAccounts().get(0));
+								doTransfer = true;
+								flag = false;
+								break;
+							case 1:
+								clientToTransfer.setActiveAccount(clientToTransfer.getAccounts().get(1));
+								doTransfer = true;
+								flag = false;
+								break;
+							case 2:
+								doTransfer = false;
+								flag = false;
+								break;
+							default:
+								System.out.println("No option ");
+								break;
+						}
 					}
 
+					System.out.println("How much money you would like to transfer ");
+
+					flag = true;
+
+					while (flag && doTransfer) {
+						amountToTransfer = sc.nextFloat();
+
+						if (amountToTransfer > BankCommander.currentClient.getActiveAccount().getBalance()) {
+							System.out.println("Not enough money");
+							flag = false;
+						} else {
+							clientToTransfer.getActiveAccount().deposit(amountToTransfer);
+							BankCommander.currentClient.getActiveAccount().withdraw(amountToTransfer);
+							System.out.println("Transfer succeed");
+							flag = false;
+						}
+
+					}
 				}
 			}
 		}else {

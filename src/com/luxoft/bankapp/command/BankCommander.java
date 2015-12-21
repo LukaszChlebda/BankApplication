@@ -54,6 +54,7 @@ public class BankCommander {
     }
 
     public static void init() {
+	    //Defaults clients to test
         try {
             currentBank.addClient(currentBank,new Client("a","a","aa@gmail.com","123456789",Gender.MALE,2000));
             currentBank.addClient(currentBank,new Client("b","b","aa@gmail.com","123456789",Gender.MALE,2000));

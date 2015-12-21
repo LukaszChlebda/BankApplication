@@ -33,7 +33,7 @@ public class FindClientCommand implements Command{
         System.out.println("Type name of client to find ");
 		clientToFindName = sc.next();
 
-		System.out.println("Type name of client to find ");
+		System.out.println("Type sure name of client to find ");
 
 		clientToFindSureName = sc.next();
 
