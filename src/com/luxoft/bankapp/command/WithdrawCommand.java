@@ -19,6 +19,8 @@ public class WithdrawCommand implements Command{
 		if(BankCommander.currentClient.getActiveAccount() != null) {
 			System.out.println("Withdraw Money: \nYou are: \n");
 			BankCommander.currentClient.printReport();
+			System.out.println("Choose account to withdraw: \n0 - Saving account \n1 - Checking account ");
+
 
 			System.out.println("enter amount you would like to withdraw ");
 			amountToWithdraw = sc.nextFloat();
@@ -30,42 +32,11 @@ public class WithdrawCommand implements Command{
 			}catch (NotEnoughtFundsException e) {
 				System.out.println(e.getMessage());
 			}
-//			if(amountToWithdraw > BankCommander.currentClient.getActiveAccount().getBalance()) {
-//				System.out.println("Not enough money SORRY ");
-//			}else {
-//				System.out.println("Take money ");
-//				BankCommander.currentClient.getActiveAccount().withdraw(amountToWithdraw);
-//				System.out.println("\n");
-//				BankCommander.currentClient.printReport();
-//			}
 
 		}else{
 			System.out.println("No active account, find client first ");
 		}
 
-
-//		if(BankCommander.currentClient.getActiveAccount() != null) {
-//			System.out.println("Withdraw Money: \nYou are: \n");
-//			BankCommander.currentClient.printReport();
-//
-//			System.out.println("enter amount you would like to withdraw ");
-//			amountToWithdraw = sc.nextFloat();
-//
-//			if(amountToWithdraw > BankCommander.currentClient.getActiveAccount().getBalance()) {
-//				System.out.println("Not enough money SORRY ");
-//			}else {
-//				System.out.println("Take money ");
-//				BankCommander.currentClient.getActiveAccount().withdraw(amountToWithdraw);
-//				System.out.println("\n");
-//				BankCommander.currentClient.printReport();
-//			}
-//
-//		}else{
-//			System.out.println("No active account, find client first ");
-//		}
-
-
-		
 	}
 
 	@Override

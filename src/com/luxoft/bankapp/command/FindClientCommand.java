@@ -37,14 +37,13 @@ public class FindClientCommand implements Command{
 
 		clientToFindSureName = sc.next();
 
-//        try {
-//	        BankCommander.currentClient = bankServiceImpl.getClient(currentBank, clientToFindName, clientToFindSureName);
-//	        System.out.println("Przed null ");
-//	        BankCommander.currentClient.printReport();
-//        }catch (ClientNotFoundException e) {
-//            System.out.println(e.getMessage() + " aaa");
-//	        System.out.println("TETETETETE");
-//        }
+        try {
+	        BankCommander.currentClient = bankServiceImpl.getClient(currentBank, clientToFindName, clientToFindSureName);
+	        BankCommander.currentClient.printReport();
+        }catch (ClientNotFoundException e) {
+            System.out.println(e.getMessage());
+
+        }
 
 		if(BankCommander.currentClient != null) {
 			BankCommander.currentClient.printReport();
