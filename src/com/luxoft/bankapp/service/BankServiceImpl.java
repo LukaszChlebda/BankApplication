@@ -26,13 +26,13 @@ public class BankServiceImpl implements BankService {
     }
 
     @Override
-    public void setActiveAccoutn(Client client, Account account) {
+    public void setActiveAccoutnt(Client client, Account account) {
         client.setActiveAccount(account);
     }
 
     @Override
-    public Client getClient(Bank bank, String clientName, String clientSureName) throws ClientNotFoundException {
+    public Client getClient(Bank bank, String clientName) throws ClientNotFoundException {
 
-	    return bank.getClient(clientName, clientSureName);
+	    return bank.getClient(clientName);
     }
 }

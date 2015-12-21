@@ -8,10 +8,12 @@ import java.util.List;
 
 public class Client implements Report {
 
+	private String name;
 	private String firstName;
 	private String sureName;
 	private String email;
 	private String phoneNumber;
+	private String city;
 	private float initialOverdraft;
     private Gender gender;
 	private List<Account> accounts;
@@ -34,14 +36,16 @@ public class Client implements Report {
 
     }
 
-	public Client(String firstName, String sureName, String email, String phoneNumber, Gender gender, float initialOverdraft) {
+	public Client(String name,String city, String email, String phoneNumber, Gender gender, float initialOverdraft) {
 		accounts = new ArrayList<>();
+		this.name = name;
 		this.firstName = firstName;
 		this.sureName = sureName;
 		this.email = email;
 		this.phoneNumber = phoneNumber;
 		this.gender = gender;
 		this.initialOverdraft = initialOverdraft;
+		this.city = city;
 		Account savingAccount = new SavingAccount(0);
 		Account checkingAccount = new CheckingAccount(0, initialOverdraft);
 
@@ -49,31 +53,45 @@ public class Client implements Report {
 		accounts.add(checkingAccount);
 	}
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
 
-        Client client = (Client) o;
+//	@Override
+//	public boolean equals(Object o) {
+//		if (this == o) return true;
+//		if (o == null || getClass() != o.getClass()) return false;
+//
+//		Client client = (Client) o;
+//
+//		if (!firstName.equals(client.firstName)) return false;
+//		return sureName.equals(client.sureName);
+//
+//	}
+//
+//	@Override
+//	public int hashCode() {
+//		int result = firstName.hashCode();
+//		result = 31 * result + sureName.hashCode();
+//		return result;
+//	}
 
-        if (Float.compare(client.initialOverdraft, initialOverdraft) != 0) return false;
-        if (firstName != null ? !firstName.equals(client.firstName) : client.firstName != null) return false;
-        if (accounts != null ? !accounts.equals(client.accounts) : client.accounts != null) return false;
-        return activeAccount != null ? activeAccount.equals(client.activeAccount) : client.activeAccount == null;
 
-    }
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
 
-    @Override
-    public int hashCode() {
-        int result = firstName != null ? firstName.hashCode() : 0;
-        result = 31 * result + (accounts != null ? accounts.hashCode() : 0);
-        result = 31 * result + (activeAccount != null ? activeAccount.hashCode() : 0);
-        result = 31 * result + (initialOverdraft != +0.0f ? Float.floatToIntBits(initialOverdraft) : 0);
-        return result;
-    }
+		Client client = (Client) o;
+
+		return name.equals(client.name);
+
+	}
+
+	@Override
+	public int hashCode() {
+		return name.hashCode();
+	}
 
 	public String getName() {
-		return firstName;
+		return name;
 	}
 
 	public String getSureName() {
@@ -86,6 +104,10 @@ public class Client implements Report {
 
 	public String getPhoneNumber() {
 		return phoneNumber;
+	}
+
+	public String getCity() {
+		return city;
 	}
 
 
@@ -121,14 +143,13 @@ public class Client implements Report {
 		sb.append("|----------------------------------------------------------\n")
 				.append("|Client: \n")
 				.append("|  ")
-				.append(getClientSalutation()).append(getFirstName())
-				.append(" ")
-				.append(getSureName())
+				.append(getClientSalutation()).append(getName())
                 .append("\n")
 				.append("|----------------------------------------------------------\n")
 				.append("|Information: \n")
 				.append("|  Email: " + getEmail() + "\n")
 				.append("|  Phone number: " + getPhoneNumber() + "\n")
+				.append("|  City: " + getCity() + "\n")
 				.append("|----------------------------------------------------------\n")
 				.append("|Account info: \n");
 

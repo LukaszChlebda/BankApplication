@@ -49,6 +49,7 @@ public class BankCommander {
                 commands[i].printCommandInfo();
             }
             int command = readUserInput.nextInt();
+
             commands[command].execute();
         }
     }
@@ -56,10 +57,15 @@ public class BankCommander {
     public static void init() {
 	    //Defaults clients to test
         try {
-            currentBank.addClient(currentBank,new Client("a","a","aa@gmail.com","123456789",Gender.MALE,2000));
-            currentBank.addClient(currentBank,new Client("b","b","aa@gmail.com","123456789",Gender.MALE,2000));
-            currentBank.getClients().get(0).getAccounts().get(0).deposit(2000);
-            currentBank.getClients().get(0).getAccounts().get(1).deposit(3000);
+            currentBank.addClient(currentBank,new Client("a","krakow","aa@gmail.com","123456789",Gender.MALE,2000));
+            currentBank.addClient(currentBank,new Client("b","Krakow","aa@gmail.com","123456789",Gender.MALE,2000));
+            //currentBank.getClients().get(0).getAccounts().get(0).deposit(2000);
+	        try {
+		        currentBank.getClient("a").getAccounts().get(0).deposit(2000);
+	        } catch (ClientNotFoundException e) {
+		        e.printStackTrace();
+	        }
+	        //currentBank.getClients().get(0).getAccounts().get(1).deposit(3000);
         } catch (ClientExistsException e) {
             e.printStackTrace();
         }

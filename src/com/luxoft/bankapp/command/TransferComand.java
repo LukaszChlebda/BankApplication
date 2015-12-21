@@ -63,7 +63,7 @@ public class TransferComand implements Command{
 				accountSureNameToTransfer = accountSureNameToTransfer.trim();
 
 				try {
-					clientToTransfer = bankServiceImpl.getClient(currentBank, accountFirstNameToTransfer, accountSureNameToTransfer);
+					clientToTransfer = bankServiceImpl.getClient(currentBank, accountFirstNameToTransfer);
 					clientToTransfer.printReport();
 				} catch (ClientNotFoundException e) {
 					doTransfer = false;

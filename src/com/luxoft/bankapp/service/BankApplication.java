@@ -14,22 +14,19 @@ public class BankApplication {
 
         printBankReport(bank);
         modifyBank(bank);
-        printBankReport(bank);
+        //printBankReport(bank);
 
-
-        //bService.removeClient(bank, bank.getClient(1));
-        printBankReport(bank);
+		if(args[0].equals("-report"))
+			printBankReport(bank);
 	}
 	
 	public static Bank initialize(BankService bService) {
 
-		Client client1 = new Client("Lukasz", Gender.MALE);
-		Client client2 = new Client("Jarek", Gender.MALE);
-        Client client3 = new Client("Krzysiek", Gender.MALE);
-        Client client4 = new Client("Test", Gender.FEMALE);
+		Client client1 = new Client("Lukasz","Krakow","lukasz@gmail.com","123456789", Gender.MALE,1000);
+		Client client2 = new Client("Jarek","Krakow","Jarek@gmail.com","123456789", Gender.MALE,500);
+        Client client3 = new Client("Przemek","Warszawa","przemo@gmail.com","123456789", Gender.MALE,200);
 
-		SavingAccount savingAccount1 = new SavingAccount(1000);
-		SavingAccount savingAccount2 = new SavingAccount(1000);
+		SavingAccount savingAccount = new SavingAccount(1000);
 		CheckingAccount checkingAccount = new CheckingAccount(1000);
 
         Bank bank = new Bank();
@@ -49,49 +46,44 @@ public class BankApplication {
 		} catch (ClientExistsException e) {
 			System.out.println(e.getMessage());
 		}
-        try {
-			bService.addClient(bank, client4);
-		} catch (ClientExistsException e) {
-			System.out.println(e.getMessage());
-		}
-        bService.addAccount(client1, savingAccount1);
-        bService.addAccount(client1, checkingAccount);
-        bService.addAccount(client1, checkingAccount);
-        bService.addAccount(client2, savingAccount1);
-        bService.addAccount(client2, checkingAccount);
-        bService.addAccount(client3, savingAccount2);
-        bService.addAccount(client3, checkingAccount);
-        bService.addAccount(client4, savingAccount2);
-        bService.addAccount(client4, checkingAccount);
+
+		Account savingAccount1 = new SavingAccount(1000);
+		Account checkingAccount1 = new CheckingAccount(5000);
+        bService.addAccount(client1,savingAccount1);
+        bService.addAccount(client1, checkingAccount1);
+		bService.setActiveAccoutnt(client1, savingAccount1);
+		//-----------------------------------------------------
+		Account savingAccount2 = new SavingAccount(5000);
+		Account checkingAccount2 = new CheckingAccount(1000);
+		bService.addAccount(client2,savingAccount2);
+		bService.addAccount(client2, checkingAccount2);
+		bService.setActiveAccoutnt(client2, savingAccount2);
+		//-----------------------------------------------------
+		Account savingAccount3 = new SavingAccount(8000);
+		Account checkingAccount3 = new CheckingAccount(7000);
+		bService.addAccount(client3,savingAccount3);
+		bService.addAccount(client3, checkingAccount3);
+		bService.setActiveAccoutnt(client3, checkingAccount3);
+
 		return bank;
 	}
 	
 	public static void modifyBank(Bank bank) throws NotEnoughtFundsException {
-		List<Client> listOfClients = bank.getClients();
-        System.out.println("Client list size: " + listOfClients.size());
-        Random rand = new Random();
-        for(int i=0; i<bank.getClients().size(); i++) {
-            
-//            bank.getClient(i).getAccounts().get(0).deposit(5000);
-//            bank.getClient(i).getAccounts().get(1).deposit(8000);
-//
-//            try {
-//            	bank.getClient(i).getAccounts().get(0).withdraw(6000);
-//            }catch(NotEnoughtFundsException e) {
-//            	System.out.println(e.getMessage());
-//            }
-//
-//            try {
-//            	bank.getClient(i).getAccounts().get(1).withdraw(11000);
-//            }catch(OverDraftLimitExceededException e) {
-//            	System.out.println(e.getMessage());
-//            }
-            
+
+        for(Client client: bank.getClients()) {
+	        client.getActiveAccount().deposit(1000 + (float)(Math.random()*10000));
+	        client.getActiveAccount().withdraw(1000);
         }
 	}
 	
 	public static void printBankReport(Bank bank) {
-		bank.printReport();
+		BankReport bankReport=new BankReport();
+		bankReport.getClientsSorted(bank);
+		bankReport.getBankCreditSum(bank);
+		bankReport.getNumberOfClients(bank);
+		bankReport.getAccountsNumber(bank);
+		bankReport.getClientsByCity(bank);
+		//bank.printReport();
 	}
 
 }

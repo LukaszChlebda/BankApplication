@@ -28,27 +28,33 @@ public class AddClientCommand implements Command {
 		Scanner sc = new Scanner(System.in);
 		boolean flag = true;
 		System.out.println("Add new client ");
-		String name = null, firstName = null, sureName = null, email = null, phoneNumber = null;
+		String name = null, city = null, email = null, phoneNumber = null;
 		Gender gender= null;
 		int chooseGender;
 		float initialOverdraft = 0;
-		String namePattern= "[a-zA-Z]*\\s[a-zA-Z]+";
+		String nameCityPattern= "[a-zA-Z]*";
 		String emailPattern = "[a-zA-Z0-9\\.]*[@][a-zA-z0-9]*\\.[a-zA-Z]{2,}";
 		String phonePattern = "[0-9]{9,9}";
 
 		while (flag) {
 			flag = true;
 			while(flag) {
-				System.out.println("Enter your name and sure name (separated with space) ");
+				System.out.println("Enter your name ");
 				name = sc.nextLine();
-				if(name.matches(namePattern)) {
-					firstName = name.substring(0,name.indexOf(" "));
-					firstName = firstName.trim();
-					sureName = name.substring(name.indexOf(" "), name.length());
-					sureName = sureName.trim();
+				if(name.matches(nameCityPattern)) {
 					flag = false;
 				}else {
-					System.out.println("Wrong first name or sure name ");
+					System.out.println("Wrong name ");
+				}
+			}
+			flag = true;
+			while(flag) {
+				System.out.println("Enter your city ");
+				city = sc.nextLine();
+				if(city.matches(nameCityPattern)) {
+					flag = false;
+				}else {
+					System.out.println("Wrong city ");
 				}
 			}
 			flag = true;
@@ -103,7 +109,7 @@ public class AddClientCommand implements Command {
 			}
 
 			try {
-				bank.addClient(bank, new Client(firstName,sureName, email, phoneNumber, gender, initialOverdraft));
+				bank.addClient(bank, new Client(name,city, email, phoneNumber, gender, initialOverdraft));
 
 			}catch (ClientExistsException e) {
 				System.out.println(e.getMessage());
