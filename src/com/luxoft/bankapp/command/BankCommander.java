@@ -29,7 +29,6 @@ public class BankCommander {
             new DepositCommand(),
             new TransferComand(currentBank),
             new AddClientCommand(currentBank),
-            new DispClientsTestCLass(currentBank),
             new Command() {
                 public void execute() {
                     System.exit(0);
@@ -41,6 +40,7 @@ public class BankCommander {
     };
 
     public static void main(String[] args) throws NotEnoughtFundsException, ClientNotFoundException {
+        BankCommander.init();
         Scanner readUserInput = new Scanner(System.in);
         boolean flag = true;
         while (flag) {
@@ -50,6 +50,17 @@ public class BankCommander {
             }
             int command = readUserInput.nextInt();
             commands[command].execute();
+        }
+    }
+
+    public static void init() {
+        try {
+            currentBank.addClient(currentBank,new Client("a","a","aa@gmail.com","123456789",Gender.MALE,2000));
+            currentBank.addClient(currentBank,new Client("b","b","aa@gmail.com","123456789",Gender.MALE,2000));
+            currentBank.getClients().get(0).getAccounts().get(0).deposit(2000);
+            currentBank.getClients().get(0).getAccounts().get(1).deposit(3000);
+        } catch (ClientExistsException e) {
+            e.printStackTrace();
         }
     }
 }

@@ -44,6 +44,7 @@ public class Client implements Report {
 		this.initialOverdraft = initialOverdraft;
 		Account savingAccount = new SavingAccount(0);
 		Account checkingAccount = new CheckingAccount(0, initialOverdraft);
+
 		accounts.add(savingAccount);
 		accounts.add(checkingAccount);
 	}

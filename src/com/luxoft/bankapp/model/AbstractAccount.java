@@ -6,15 +6,7 @@ public abstract class AbstractAccount implements Account {
 	private float balance;
 	
 	public AbstractAccount(float balance) throws IllegalArgumentException{
-//		if(balance < 0) {
-//			throw new IllegalArgumentException();
-//		}
-//		else {
-//			this.balance = balance;
-//		}
-
 		setBalance(balance);
-		
 	}
 
 	@Override

@@ -16,7 +16,6 @@ public class CheckingAccount extends AbstractAccount {
 			throw new IllegalArgumentException();
 		}
 		this.overdraft = overdraft;
-		System.out.println("Overdraft test " + this.overdraft);
 	}
 
     private float overdraft;
@@ -67,12 +66,14 @@ public class CheckingAccount extends AbstractAccount {
 
     @Override
     public void withdraw(float amount) throws OverDraftLimitExceededException{
-    	if(amount > getBalance()) {
+    	if(amount > getBalance()+overdraft) {
     		throw new OverDraftLimitExceededException(this,amount);
     	}else {
-    		if(getBalance() >= amount-overdraft) {
+    		if(getBalance() >= amount) {
                 setBalance(getBalance()-amount);
-            }
+            }else {
+				setOverdraft(overdraft-amount);
+			}
     	}
         
     }
