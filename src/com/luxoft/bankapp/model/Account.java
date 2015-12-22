@@ -5,6 +5,7 @@ import com.luxoft.bankapp.service.*;
 
 public interface Account extends Report{
 	public float getBalance();
+	public float getOverdraft();
     public void printReport();
 	public void deposit(float x);
 	public void withdraw(float x) throws NotEnoughtFundsException;

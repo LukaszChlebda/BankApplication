@@ -33,20 +33,6 @@ public class FindClientCommand implements Command{
         System.out.println("Type name of client to find ");
 		clientToFindName = sc.next();
 
-//        try {
-//	        BankCommander.currentClient = bankServiceImpl.getClient(currentBank, clientToFindName);
-//	        BankCommander.currentClient.printReport();
-//        }catch (ClientNotFoundException e) {
-//            System.out.println(e.getMessage());
-//
-//        }
-//
-//		if(BankCommander.currentClient != null) {
-//			BankCommander.currentClient.setActiveAccount(BankCommander.currentClient.getAccounts().get(1));
-//		}else {
-//			System.out.println("No client ");
-//		}
-
 		BankCommander.currentClient = currentBank.getMapOfClients().get(clientToFindName);
 		if(BankCommander.currentClient != null) {
 			BankCommander.currentClient.printReport();

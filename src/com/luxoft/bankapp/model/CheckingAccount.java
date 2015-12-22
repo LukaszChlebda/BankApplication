@@ -24,11 +24,8 @@ public class CheckingAccount extends AbstractAccount {
 	public boolean equals(Object o) {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
-
 		CheckingAccount that = (CheckingAccount) o;
-
 		return Float.compare(that.overdraft, overdraft) == 0;
-
 	}
 
 	@Override
@@ -43,10 +40,6 @@ public class CheckingAccount extends AbstractAccount {
 			System.out.println("New Overdraft has been set ");
 			this.overdraft = amount;
 		}
-	}
-	
-	public float getOverdraft() {
-		return overdraft;
 	}
 
     public String getAccountInfo() {
@@ -66,17 +59,18 @@ public class CheckingAccount extends AbstractAccount {
 
     @Override
     public void withdraw(float amount) throws OverDraftLimitExceededException{
-    	if(amount > getBalance()+overdraft) {
-    		throw new OverDraftLimitExceededException(this,amount);
-    	}else {
-    		if(getBalance() >= amount) {
+		float limit = getBalance()+overdraft;
+		if(amount > getBalance()+overdraft) {
+			System.out.println("You trying withdraw " + amount + " Not enough founds, your limit is: " + limit);
+		}else {
                 setBalance(getBalance()-amount);
-            }else {
-				setOverdraft(overdraft-amount);
-			}
-    	}
-        
+		}
     }
+
+	@Override
+	public float getOverdraft() {
+		return overdraft;
+	}
 
     public void printReport() {
         System.out.println(toString());

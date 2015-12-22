@@ -11,12 +11,10 @@ import java.util.*;
  */
 public class BankReport {
 
-//	private Bank bank = null;
-//	public BankReport(Bank bank) {
-//		this.bank = bank;
-//	}
 	public void getNumberOfClients(Bank bank) {
-		System.out.println("Bank has " + bank.getClients().size() + " clients.");
+		System.out.println("--------------------------------------------" +
+				"\nBank has " + bank.getClients().size() + " clients.\n" +
+				"--------------------------------------------");
 	}
 
 	public void getAccountsNumber(Bank bank) {
@@ -24,28 +22,35 @@ public class BankReport {
 
 		for(Client client:bank.getClients())
 			numberOfAccounts+=client.getAccounts().size();
-		System.out.println("Bank has " + numberOfAccounts + " accounts.");
+		System.out.println("--------------------------------------------" +
+				"\nBank has " + numberOfAccounts + " accounts.\n" +
+				"--------------------------------------------");
 	}
 
 	public void getClientsSorted(Bank bank) {
-//		Set<Client> sortedClient = new TreeSet<>();
-//		sortedClient.addAll(bank.getClients());
-//
-//		Iterator<Client> iterator = sortedClient.iterator();
-//		System.out.println("Client of the bank \n");
-//		while (iterator.hasNext()) {
-//			System.out.println(iterator.next());
-//		}
+		System.out.println("--------------------------------------------\nClients of bank in sorted order \n");
 		for(Client client: bank.getClients())
 			System.out.println(client.getName());
+		System.out.println("--------------------------------------------");
 	}
 
-	//To implement
 	public void getBankCreditSum(Bank bank) {
+		float credit = 0;
 
+		for(Client client: bank.getClients()) {
+			for (Account account: client.getAccounts()) {
+				if(account.getBalance() < 0) {
+					credit+=account.getBalance();
+				}
+			}
+		}
+
+		System.out.println("--------------------------------------------" +
+				"\nBank credit for all clients is: " + credit + " \n" +
+				"--------------------------------------------");
 	}
 
-	public void getClientsByCity(Bank bank){
+	public void getClientsByCity(Bank bank) {
 		Map<String, List<Client>> cityMap = new TreeMap<>();
 
 		for(Client client:bank.getClients())

@@ -10,17 +10,28 @@ public abstract class AbstractAccount implements Account {
 	}
 
 	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+
+		AbstractAccount that = (AbstractAccount) o;
+
+		return Float.compare(that.balance, balance) == 0;
+
+	}
+
+	@Override
+	public int hashCode() {
+		return (balance != +0.0f ? Float.floatToIntBits(balance) : 0);
+	}
+
+	@Override
 	public float getBalance() {
 		return balance;
 	}
 	
 	public void setBalance(float balance) throws IllegalArgumentException {
-		if(balance < 0) {
-			new IllegalArgumentException();
-		}
-		else {
 			this.balance = balance;
-		}
 	}
 
     public abstract String getAccountInfo();
@@ -28,6 +39,10 @@ public abstract class AbstractAccount implements Account {
 	@Override
     public abstract void deposit(float x);
 
+	@Override
+	public  float getOverdraft() {
+		return 0;
+	};
 	@Override
     public abstract void withdraw(float x) throws NotEnoughtFundsException;
 }
