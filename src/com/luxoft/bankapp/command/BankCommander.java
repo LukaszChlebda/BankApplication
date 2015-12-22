@@ -85,19 +85,19 @@ public class BankCommander {
 
     public static void init() {
         try {
-            currentBank.addClient(currentBank,new Client("a","krakow","aa@gmail.com","123456789",Gender.MALE,2000));
-            currentBank.addClient(currentBank,new Client("b","Krakow","aa@gmail.com","123456789",Gender.MALE,2000));
+            currentBank.addClient(currentBank,new Client("Lukasz","krakow","aa@gmail.com","123456789",Gender.MALE,2000));
+            currentBank.addClient(currentBank,new Client("Marek","Krakow","aa@gmail.com","123456789",Gender.MALE,2000));
             try {
-                currentBank.getClient("a").addAccount(new SavingAccount(0));
-                currentBank.getClient("a").addAccount(new CheckingAccount(0, 2000));
-                currentBank.getClient("b").addAccount(new SavingAccount(0));
-                currentBank.getClient("b").addAccount(new CheckingAccount(0, 2000));
+                currentBank.getClient("Lukasz").addAccount(new SavingAccount(0));
+                currentBank.getClient("Lukasz").addAccount(new CheckingAccount(0, 2000));
+                currentBank.getClient("Marek").addAccount(new SavingAccount(0));
+                currentBank.getClient("Marek").addAccount(new CheckingAccount(0, 2000));
             } catch (ClientNotFoundException e) {
                 e.printStackTrace();
             }
 
 	        try {
-		        currentBank.getClient("a").getAccounts().get(0).deposit(2000);
+		        currentBank.getClient("Lukasz").getAccounts().get(0).deposit(2000);
 	        } catch (ClientNotFoundException e) {
 		        e.printStackTrace();
 	        }
