@@ -30,7 +30,9 @@ public class BankCommander {
         commandMap.put("3", new DepositCommand());
         commandMap.put("4", new TransferComand(currentBank));
         commandMap.put("5", new AddClientCommand(currentBank));
-        commandMap.put("6", new Command() {
+        commandMap.put("6", new LoadFromFileComand());
+        commandMap.put("7", new DispAllClientsTestClass(currentBank));
+        commandMap.put("8", new Command() {
             @Override
             public void execute() throws ClientNotFoundException, NotEnoughtFundsException {
                 System.exit(0);
@@ -58,6 +60,8 @@ public class BankCommander {
             new DepositCommand(),
             new TransferComand(currentBank),
             new AddClientCommand(currentBank),
+            new LoadFromFileComand(),
+            new DispAllClientsTestClass(currentBank),
             new Command() {
                 public void execute() {
                     System.exit(0);
@@ -68,11 +72,12 @@ public class BankCommander {
             }
     };
 
-    public static void main(String[] args) throws NotEnoughtFundsException, ClientNotFoundException {
+    public static void main(String[] args) throws NotEnoughtFundsException, ClientNotFoundException, ClientExistsException {
         BankCommander.init();
         BankCommander.initCommands();
         Scanner readUserInput = new Scanner(System.in);
         boolean flag = true;
+        System.out.println(commands.length);
         while (flag) {
             for (int i = 0; i < commands.length; i++) {
                 System.out.print(i + ") ");

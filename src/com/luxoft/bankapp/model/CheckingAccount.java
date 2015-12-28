@@ -3,8 +3,14 @@ package com.luxoft.bankapp.model;
 import com.luxoft.bankapp.exceptions.NotEnoughtFundsException;
 
 import com.luxoft.bankapp.exceptions.OverDraftLimitExceededException;
+import com.sun.xml.internal.ws.api.model.SEIModel;
 
-public class CheckingAccount extends AbstractAccount {
+import java.io.Serializable;
+import java.util.Map;
+
+public class CheckingAccount extends AbstractAccount implements Serializable{
+
+	public CheckingAccount(){};
 
 	public CheckingAccount(float balance) {
 		super(balance);
@@ -80,4 +86,15 @@ public class CheckingAccount extends AbstractAccount {
     	return "Checking account  balance: " + this.getBalance()
 			    + ", overdraft: " + this.getOverdraft();
     }
+
+	@Override
+	public void parseFeed(Map<String,String> feed) {
+		super.parseFeed(feed);
+		setOverdraft(Float.parseFloat(feed.get("overdraft")));
+	}
+
+	@Override
+	public String getAccountType() {
+		return "c";
+	}
 }

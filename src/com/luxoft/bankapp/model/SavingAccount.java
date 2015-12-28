@@ -2,8 +2,12 @@ package com.luxoft.bankapp.model;
 
 import com.luxoft.bankapp.exceptions.NotEnoughtFundsException;
 
+import java.io.Serializable;
 
-public class SavingAccount extends AbstractAccount {
+
+public class SavingAccount extends AbstractAccount implements Serializable{
+
+    public SavingAccount(){};
 	
 	public SavingAccount(float balance){
 		super(balance);
@@ -41,6 +45,9 @@ public class SavingAccount extends AbstractAccount {
     	return "Saving account  balance: " + getBalance();
     }
 
-	
+    @Override
+    public String getAccountType() {
+        return "s";
+    }
 
 }

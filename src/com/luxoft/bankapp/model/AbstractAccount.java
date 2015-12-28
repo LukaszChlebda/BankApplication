@@ -2,9 +2,14 @@ package com.luxoft.bankapp.model;
 
 import com.luxoft.bankapp.exceptions.NotEnoughtFundsException;
 
+import java.io.Serializable;
+import java.util.Map;
+
 public abstract class AbstractAccount implements Account {
 	private float balance;
-	
+
+	public AbstractAccount(){};
+
 	public AbstractAccount(float balance) throws IllegalArgumentException{
 		setBalance(balance);
 	}
@@ -45,4 +50,9 @@ public abstract class AbstractAccount implements Account {
 	};
 	@Override
     public abstract void withdraw(float x) throws NotEnoughtFundsException;
+
+	@Override
+	public void parseFeed(Map<String, String> feed) {
+		setBalance(Float.parseFloat(feed.get("balance")));
+	}
 }

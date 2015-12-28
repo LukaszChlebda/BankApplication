@@ -11,4 +11,6 @@ public interface BankService {
     public void addAccount(Client client, Account account);
     public void setActiveAccoutnt(Client client, Account account);
     public Client getClient(Bank bank, String clientName) throws ClientNotFoundException;
+    public void saveClient(Client client);
+    public Client loadClient(String objectName);
 }

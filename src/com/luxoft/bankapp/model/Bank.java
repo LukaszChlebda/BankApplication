@@ -2,6 +2,7 @@ package com.luxoft.bankapp.model;
 
 import com.luxoft.bankapp.service.*;
 import com.luxoft.bankapp.exceptions.*;
+import com.sun.org.apache.xpath.internal.SourceTree;
 
 import java.util.*;
 
@@ -76,11 +77,36 @@ public class Bank implements Report{
 		    }
 	    }
 	    if(!clientFoundFlag) {
-		    throw new ClientNotFoundException(name);
+		    //throw new ClientNotFoundException(name);
+			return null;
 	    }
 	    return null;
 
     }
+
+	public void parseFeed(Map<String, String> feedMap) throws ClientExistsException {
+		String name = feedMap.get("name");
+		String email = feedMap.get("email");
+		String phone = feedMap.get("phone");
+		String city = feedMap.get("city");
+		String genderType = feedMap.get("gender");
+		Gender gender = null;
+		if(genderType.equals("f")){
+			gender = Gender.FEMALE;
+		}else if(genderType.equals("m")){
+			gender = Gender.MALE;
+		}else {
+			gender = null;
+		}
+		Client client = mapOfClients.get(name);
+		if(client == null) {
+			client = new Client(name,city, email,phone, gender);
+			//bank.clients.add(client);
+			addClient(this, client);
+		}
+
+		client.parseFeed(feedMap);
+	}
 	
 	public void addClient(Bank bank, Client client) throws ClientExistsException{
 //		try {
