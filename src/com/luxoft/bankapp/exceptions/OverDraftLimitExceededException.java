@@ -12,8 +12,8 @@ public class OverDraftLimitExceededException extends NotEnoughtFundsException{
 		message = "Overdraft limit exceeded ";	
 	}
 	public OverDraftLimitExceededException(CheckingAccount account, float toWithdraw) {
-		message = "For account " + account + "the founds are " + account.getBalance() + 
-				" so you can't withcdraw " + account;
+		message = "For account " + account + "the founds are " + account.getBalance() +
+				" so you can't withdraw " + account;
 
 	}
 	
