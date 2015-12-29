@@ -18,8 +18,9 @@ import java.io.*;
 import static org.junit.Assert.assertEquals;
 
 /**
- * Created by dvorak on 28.12.15.
+ * Created by Łukasz on 28.12.15.
  */
+
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class TestSerialization {
 
@@ -29,7 +30,7 @@ public class TestSerialization {
     String clientName = "Przemek";
     String clientObject = clientName+".object";
     @Before
-    public void preperTest() {
+    public void peeperTest() {
         bService = new BankServiceImpl();
         bank = BankApplication.initialize(bService);
         client = null;
