@@ -8,6 +8,8 @@ public class LoginReguest implements Request {
 
     private String name;
 
+    public LoginReguest(){};
+
     public LoginReguest(String name) {
         this.name = name;
     }
@@ -19,6 +21,6 @@ public class LoginReguest implements Request {
 
     @Override
     public void printRequestInfo() {
-        System.out.println("Log in to the system s");
+        System.out.println("Log in to the system ");
     }
 }

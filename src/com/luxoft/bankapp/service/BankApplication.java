@@ -24,9 +24,10 @@ public class BankApplication {
 //        modifyBank(bank);
 //		System.out.println("AFTER MODIFICATIONS");
 //		printBankReport(bank);
-
-		if(args[0].equals("-report"))
-			printBankReport(bank);
+		if(args.length>0) {
+			if(args[0].equals("-report"))
+				printBankReport(bank);
+		}
 	}
 	
 	public static Bank initialize(BankService bService) {

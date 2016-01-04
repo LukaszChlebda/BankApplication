@@ -1,5 +1,7 @@
 package com.luxoft.bankapp.serwer;
 
+import com.luxoft.bankapp.model.Client;
+
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -15,6 +17,8 @@ public class BankClient {
     ObjectInputStream objectInputStream;
     String message;
     static final String SERVER = "localhost";
+
+    private Client client = null;
 
     public void run() {
         try {
