@@ -5,6 +5,9 @@ import com.luxoft.bankapp.exceptions.ClientNotFoundException;
 import com.luxoft.bankapp.exceptions.NotEnoughtFundsException;
 import com.luxoft.bankapp.exceptions.OverDraftLimitExceededException;
 import com.luxoft.bankapp.model.*;
+import com.luxoft.bankapp.serwer.BankClient;
+import com.luxoft.bankapp.serwer.BankServer;
+
 import java.util.*;
 
 public class BankApplication {
@@ -13,10 +16,14 @@ public class BankApplication {
         BankService bService = new BankServiceImpl();
         Bank bank = BankApplication.initialize(bService);
 
-        printBankReport(bank);
-        modifyBank(bank);
-		System.out.println("AFTER MODIFICATIONS");
-		printBankReport(bank);
+		BankServer bankServer = new BankServer(bank);
+		bankServer.run();
+
+
+//        printBankReport(bank);
+//        modifyBank(bank);
+//		System.out.println("AFTER MODIFICATIONS");
+//		printBankReport(bank);
 
 		if(args[0].equals("-report"))
 			printBankReport(bank);

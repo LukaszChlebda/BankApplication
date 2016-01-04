@@ -16,6 +16,7 @@ import org.junit.runners.MethodSorters;
 import java.io.*;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Created by Łukasz on 28.12.15.
@@ -39,6 +40,8 @@ public class TestSerialization {
     @Test
     public void testAObjectSerialize() throws ClientNotFoundException {
         bService.saveClient(bank.getClient(clientName));
+        File file = new File(clientObject);
+        assertTrue(file.exists());
     }
 
     @Test
