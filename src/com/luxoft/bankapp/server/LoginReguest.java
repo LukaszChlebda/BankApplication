@@ -14,6 +14,17 @@ public class LoginReguest implements Request {
         this.name = name;
     }
 
+    public boolean checkLoginRequest(String name) {
+
+
+
+        return false;
+    }
+
+    public void sendMessage(String message) {
+
+    }
+
     public String getLogin() {
         return name;
     }

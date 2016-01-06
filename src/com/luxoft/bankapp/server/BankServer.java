@@ -1,5 +1,6 @@
 package com.luxoft.bankapp.server;
 
+import com.luxoft.bankapp.exceptions.ClientNotFoundException;
 import com.luxoft.bankapp.model.Bank;
 
 import java.io.IOException;
@@ -43,6 +44,13 @@ public class BankServer {
                 try{
                     message = (String)objectInputStream.readObject();
                     System.out.println("client>" + message);
+                    try {
+                        bank.getClient(message);
+                        sendMessage("OK");
+                    }catch (ClientNotFoundException e) {
+                        sendMessage("ERROR");
+                        System.out.println(e);
+                    }
                     if(message.equals("bye")) {
                         sendMessage("bye");
                     }

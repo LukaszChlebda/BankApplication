@@ -29,26 +29,28 @@ public class BankClient {
     public void serviceRequest() {
         Scanner sc = new Scanner(System.in);
         boolean flag = true;
-        String useraName;
+        String userName;
         String userInput;
         System.out.println("Welcome in super Bank \nEnter your name to login into system \n$> ");
-        useraName = sc.next();
+        userName = sc.next();
 
-        if(loggedIn) {
-            System.out.println("Hello " + useraName);
+
+       if(loginRequest(userName)){
+            System.out.println("Hello " + userName);
             while (flag) {
                 System.out.println("\nChoose action: \n1 - Display accounts information \n" +
                         "2 - Withdraw \n" +
                         "3 - Logout \n$> ");
-                useraName = sc.next();
+                userName = sc.next();
 
-                switch (useraName) {
+                switch (userName) {
                     case "1":
                         break;
                     case "2":
                         break;
                     case "3":
                         message = "bye";
+                        sendMessage(message);
                         flag = false;
                         break;
                     default:
@@ -56,11 +58,9 @@ public class BankClient {
                         break;
                 }
             }
-        }else{
-            System.out.println("No user " + useraName + " found in database ");
+        }else {
+           System.out.println("No user " + userName + " found in database ");
         }
-
-
     }
 
 
@@ -73,19 +73,20 @@ public class BankClient {
             objectInputStream = new ObjectInputStream(requestSocket.getInputStream());
 
             do {
-                try {
-                    serviceRequest();
-                    message = (String) objectInputStream.readObject();
-                    System.out.println("Server>" + message);
-                    sendMessage("Hi my server ");
-                    message = "bye";
-                    sendMessage(message);
-
-                } catch (ClassNotFoundException e) {
-                    System.err.print("Class not found ");
-                } catch (IOException f) {
-                    System.err.print("IE exception ");
-                }
+                serviceRequest();
+//                try {
+//                    serviceRequest();
+////                    message = (String) objectInputStream.readObject();
+////                    System.out.println("Server>" + message);
+////                    sendMessage("Hi my server ");
+////                    //message = "bye";
+////                    //sendMessage(message);
+//
+//                } catch (ClassNotFoundException e) {
+//                    System.err.print("Class not found ");
+//                } catch (IOException f) {
+//                    System.err.print("IE exception ");
+//                }
 
             } while (!message.equals("bye"));
 
@@ -103,6 +104,22 @@ public class BankClient {
                 e.printStackTrace();
             }
         }
+    }
+
+    public boolean loginRequest(String name) {
+        sendMessage(name);
+        try {
+            message = (String) objectInputStream.readObject();
+            if(message.equals("OK"));
+            {
+                return true;
+            }
+        }catch (ClassNotFoundException e) {
+
+        }catch (IOException f) {
+
+        }
+        return false;
     }
     public void sendMessage(String message) {
         try {
