@@ -33,9 +33,7 @@ public class BankClient {
         String userInput;
         System.out.println("Welcome in super Bank \nEnter your name to login into system \n$> ");
         useraName = sc.next();
-        if(useraName.equals("Luk")) {
-            loggedIn = true;
-        }
+
         if(loggedIn) {
             System.out.println("Hello " + useraName);
             while (flag) {
