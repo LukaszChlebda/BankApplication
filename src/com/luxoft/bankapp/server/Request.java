@@ -1,4 +1,4 @@
-package com.luxoft.bankapp.serwer;
+package com.luxoft.bankapp.server;
 
 import java.io.Serializable;
 

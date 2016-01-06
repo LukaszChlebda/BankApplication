@@ -1,16 +1,12 @@
-package com.luxoft.bankapp.serwer;
+package com.luxoft.bankapp.server;
 
-import com.luxoft.bankapp.exceptions.ClientNotFoundException;
 import com.luxoft.bankapp.model.Bank;
-import com.luxoft.bankapp.service.BankService;
-import com.sun.org.apache.xpath.internal.SourceTree;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.Scanner;
 
 /**
  * Created by LChlebda on 2016-01-04.
@@ -24,44 +20,6 @@ public class BankServer {
     ObjectInputStream objectInputStream;
 
     String message;
-
-    Request loginRequest = new LoginReguest();
-
-    Request[] requests = {loginRequest};
-
-    public void serviceRequest() {
-        Scanner sc = new Scanner(System.in);
-        boolean flag = true;
-        String userInput;
-        System.out.println("Welcome super Bank \nEnter your name to login into system \n$> ");
-        userInput = sc.next();
-
-        try{
-            bank.getClient(userInput);
-            while (flag) {
-                System.out.println("Choose action: \n1 - Display accounts information \n" +
-                        "2 - Withdraw \n" +
-                        "3 - Logout \n$> ");
-                userInput = sc.next();
-
-                switch (userInput) {
-                    case "1":
-                        break;
-                    case "2":
-                        break;
-                    case "3":
-                        break;
-                    default:
-                        System.out.println("No such option ");
-                        break;
-                }
-            }
-        }catch (ClientNotFoundException e) {
-            System.out.println("No user " + userInput + " found in database ");
-        }
-
-
-    }
 
     public BankServer(Bank bank) {
         this.bank = bank;

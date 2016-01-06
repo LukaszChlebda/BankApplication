@@ -3,12 +3,8 @@ package com.luxoft.bankapp.service;
 import com.luxoft.bankapp.exceptions.ClientExistsException;
 import com.luxoft.bankapp.exceptions.ClientNotFoundException;
 import com.luxoft.bankapp.exceptions.NotEnoughtFundsException;
-import com.luxoft.bankapp.exceptions.OverDraftLimitExceededException;
 import com.luxoft.bankapp.model.*;
-import com.luxoft.bankapp.serwer.BankClient;
-import com.luxoft.bankapp.serwer.BankServer;
-
-import java.util.*;
+import com.luxoft.bankapp.server.BankServer;
 
 public class BankApplication {
 
