@@ -178,6 +178,14 @@ public class Client implements Report, Serializable {
 		System.out.println("|----------------------------------------------------------");
 	}
 
+	public String getAccountsInfo() {
+		String accountsInfo = "";
+		for(Account account: getAccounts()) {
+			accountsInfo += account.getAccountInfo() + " ";
+		}
+		return accountsInfo;
+	}
+
 
 	@Override
 	public String toString() {

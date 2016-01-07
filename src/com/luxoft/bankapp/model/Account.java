@@ -14,5 +14,6 @@ public interface Account extends Report{
 	public void decimalValue();
 	public void parseFeed(Map<String,String> feed);
 	public String getAccountType();
+	public String getAccountInfo();
 	
 }

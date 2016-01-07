@@ -81,6 +81,10 @@ public class CheckingAccount extends AbstractAccount implements Serializable{
     public void printReport() {
         System.out.println(toString());
     }
+
+	public String getAccountReport() {
+		return toString();
+	}
     
     public String toString() {
     	return "Checking account  balance: " + this.getBalance()

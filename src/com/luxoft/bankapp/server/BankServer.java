@@ -1,7 +1,11 @@
 package com.luxoft.bankapp.server;
 
 import com.luxoft.bankapp.exceptions.ClientNotFoundException;
+import com.luxoft.bankapp.exceptions.NotEnoughtFundsException;
+import com.luxoft.bankapp.exceptions.RequestNotFoundException;
+import com.luxoft.bankapp.model.Account;
 import com.luxoft.bankapp.model.Bank;
+import com.luxoft.bankapp.model.Client;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -16,15 +20,55 @@ public class BankServer {
     private Bank bank = null;
     ServerSocket providerSocket;
     Socket connection = null;
-
+    private Client activeClient;
     ObjectOutputStream objectOutputStream;
     ObjectInputStream objectInputStream;
 
-    String message;
+    String message = "asa";
+    Request requestMessage;
+
+    Request getRequest;
 
     public BankServer(Bank bank) {
         this.bank = bank;
     }
+
+    public void getRequest(Request requestMessage) throws RequestNotFoundException {
+        if (requestMessage.getRequestType() == RequestType.LOGIN_REQUEST) {
+            try {
+                System.out.println("Checking user in database ");
+                activeClient = bank.getClient(((LoginReguest)requestMessage).getLogin());
+                sendMessage("OK");
+            } catch (ClientNotFoundException e) {
+                activeClient = null;
+                sendMessage("ERROR");
+            }
+
+        } else if (requestMessage.getRequestType() == RequestType.LOGOUT_REQUEST) {
+            message = ((LogoutRequest)requestMessage).getRequestInfo();
+            System.out.println(message);
+
+        } else if (requestMessage.getRequestType() == RequestType.CHANGE_ACTIVE_ACCOUNT) {
+
+        } else if (requestMessage.getRequestType() == RequestType.GET_ACCOUNTS_INFO) {
+            message = activeClient.getAccountsInfo();
+            activeClient.setActiveAccount(activeClient.getAccounts().get(0));
+            sendMessage(message);
+
+        } else if (requestMessage.getRequestType() == RequestType.WITHDRAW_REQUEST) {
+            try {
+                activeClient.getActiveAccount().withdraw(((WithdrawRequest)requestMessage).getAmountToWithdraw());
+                message = activeClient.getAccountsInfo();
+                sendMessage("OK \n" + message);
+            } catch (NotEnoughtFundsException e) {
+                sendMessage("Not enough founds");
+            }
+
+        } else {
+            throw new RequestNotFoundException();
+        }
+    }
+
 
     public void run() {
         try {
@@ -41,22 +85,16 @@ public class BankServer {
             sendMessage("Connection successful");
 
             do{
-                try{
-                    message = (String)objectInputStream.readObject();
-                    System.out.println("client>" + message);
                     try {
-                        bank.getClient(message);
-                        sendMessage("OK");
-                    }catch (ClientNotFoundException e) {
-                        sendMessage("ERROR");
-                        System.out.println(e);
+
+                        requestMessage = (Request)objectInputStream.readObject();
+                        System.out.println("Request type " + requestMessage.getRequestType());
+                        getRequest(requestMessage);
+                    } catch (RequestNotFoundException e) {
+                        e.printStackTrace();
+                    } catch (ClassNotFoundException e) {
+                        e.printStackTrace();
                     }
-                    if(message.equals("bye")) {
-                        sendMessage("bye");
-                    }
-                }catch (ClassNotFoundException e) {
-                    System.err.println("Data received in unknown format");
-                }
 
             }while (!message.equals("bye"));
 

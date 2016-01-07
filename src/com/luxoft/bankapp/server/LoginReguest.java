@@ -8,25 +8,23 @@ public class LoginReguest implements Request {
 
     private String name;
 
+    private RequestType requestType = RequestType.LOGIN_REQUEST;
+
     public LoginReguest(){};
 
     public LoginReguest(String name) {
         this.name = name;
     }
 
-    public boolean checkLoginRequest(String name) {
-
-
-
-        return false;
-    }
-
-    public void sendMessage(String message) {
-
-    }
-
     public String getLogin() {
         return name;
+    }
+
+    public void setLogin(String login) {
+        this.name = login;
+    }
+    public RequestType getRequestType() {
+        return requestType;
     }
 
 

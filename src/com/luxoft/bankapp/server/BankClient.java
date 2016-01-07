@@ -16,15 +16,18 @@ public class BankClient {
     Socket requestSocket;
     ObjectOutputStream objectOutputStream;
     ObjectInputStream objectInputStream;
-    String message;
+    String message = "test";
     static final String SERVER = "localhost";
     private boolean loggedIn = false;
     private Client client = null;
 
+   // String tempGetRequest;
 
-    Request loginRequest = new LoginReguest();
-
-    Request[] requests = {loginRequest};
+    private Request logoutRequest;
+    private Request loginRequest;
+    private Request getActiveAccountRequest;
+    private Request withdrawRequest;
+//    Request[] requests = {loginRequest};
 
     public void serviceRequest() {
         Scanner sc = new Scanner(System.in);
@@ -34,8 +37,24 @@ public class BankClient {
         System.out.println("Welcome in super Bank \nEnter your name to login into system \n$> ");
         userName = sc.next();
 
+        loginRequest = new LoginReguest();
+        ((LoginReguest)loginRequest).setLogin(userName);
+        sendRequest(loginRequest);
 
-       if(loginRequest(userName)){
+        try {
+            message = (String) objectInputStream.readObject();
+            System.out.println(message);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        if(message.equals("OK")) {
+            loggedIn = true;
+        }
+
+        if(loggedIn){
             System.out.println("Hello " + userName);
             while (flag) {
                 System.out.println("\nChoose action: \n1 - Display accounts information \n" +
@@ -45,12 +64,37 @@ public class BankClient {
 
                 switch (userName) {
                     case "1":
+                        getActiveAccountRequest = new GetAccountsInfoRequest();
+                        sendRequest(getActiveAccountRequest);
+                        try {
+                            message = (String)objectInputStream.readObject();
+                            System.out.println(message);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        } catch (ClassNotFoundException e) {
+                            e.printStackTrace();
+                        }
                         break;
                     case "2":
+                        System.out.println("Enter amount ");
+                        userInput = sc.next();
+                        withdrawRequest = new WithdrawRequest();
+                        ((WithdrawRequest)withdrawRequest).setAmountToWithdraw(Float.valueOf(userInput));
+                        sendRequest(withdrawRequest);
+                        try {
+                            message = (String)objectInputStream.readObject();
+                            System.out.println(message);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        } catch (ClassNotFoundException e) {
+                            e.printStackTrace();
+                        }
                         break;
                     case "3":
-                        message = "bye";
-                        sendMessage(message);
+                        logoutRequest = new LogoutRequest();
+                        sendRequest(logoutRequest);
+                        ((LoginReguest) loginRequest).setLogin("");
+                        loggedIn = false;
                         flag = false;
                         break;
                     default:
@@ -71,22 +115,11 @@ public class BankClient {
             objectOutputStream = new ObjectOutputStream(requestSocket.getOutputStream());
             objectOutputStream.flush();
             objectInputStream = new ObjectInputStream(requestSocket.getInputStream());
+            message = (String)objectInputStream.readObject();
+            System.out.println(message);
 
             do {
                 serviceRequest();
-//                try {
-//                    serviceRequest();
-////                    message = (String) objectInputStream.readObject();
-////                    System.out.println("Server>" + message);
-////                    sendMessage("Hi my server ");
-////                    //message = "bye";
-////                    //sendMessage(message);
-//
-//                } catch (ClassNotFoundException e) {
-//                    System.err.print("Class not found ");
-//                } catch (IOException f) {
-//                    System.err.print("IE exception ");
-//                }
 
             } while (!message.equals("bye"));
 
@@ -95,7 +128,10 @@ public class BankClient {
             System.err.println("You are trying to connect to an unknown host!");
         } catch (IOException ioException) {
             ioException.printStackTrace();
-        }finally {
+
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } finally {
             try{
                 objectInputStream.close();
                 objectOutputStream.close();
@@ -129,6 +165,27 @@ public class BankClient {
         } catch (IOException ioException) {
             ioException.printStackTrace();
         }
+    }
+
+    public void sendRequest(Request request) {
+        try {
+            objectOutputStream.writeObject(request);
+            objectOutputStream.flush();
+            System.out.println("client>" + request.getRequestType());
+        } catch (IOException ioException) {
+            ioException.printStackTrace();
+        }
+    }
+
+    public String reciveRequest() {
+        try {
+            message = (String)objectInputStream.readObject();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return message;
     }
 
     public static void main(String[] args) {
