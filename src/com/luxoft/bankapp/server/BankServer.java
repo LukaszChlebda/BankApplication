@@ -49,7 +49,8 @@ public class BankServer {
             System.out.println(message);
 
         } else if (requestMessage.getRequestType() == RequestType.CHANGE_ACTIVE_ACCOUNT) {
-
+            activeClient.setActiveAccount(activeClient.getAccounts().get(((ChangeActiveAccountRequest)requestMessage).getActiveAccount()));
+            sendMessage("OK");
         } else if (requestMessage.getRequestType() == RequestType.GET_ACCOUNTS_INFO) {
             message = activeClient.getAccountsInfo();
             activeClient.setActiveAccount(activeClient.getAccounts().get(0));
