@@ -9,11 +9,12 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.Scanner;
+import java.util.concurrent.RunnableFuture;
 
 /**
  * Created by LChlebda on 2016-01-04.
  */
-public class BankClient {
+public class BankClient{
     Socket requestSocket;
     ObjectOutputStream objectOutputStream;
     ObjectInputStream objectInputStream;
@@ -22,109 +23,53 @@ public class BankClient {
     private boolean loggedIn = false;
     private Client client = null;
     boolean activeAccountChoosen = false;
-   // String tempGetRequest;
-
+    Scanner sc = new Scanner(System.in);
+    String userInput;
     private Request logoutRequest;
     private Request loginRequest;
     private Request getActiveAccountRequest;
     private Request changeActiveAccountRequest;
     private Request withdrawRequest;
 //    Request[] requests = {loginRequest};
+    boolean flag = true;
+    String userName;
 
     public void serviceRequest() {
-        Scanner sc = new Scanner(System.in);
-        boolean flag = true;
-        String userName;
-        String userInput;
-        System.out.println("Welcome in super Bank \nEnter your name to login into system \n$> ");
-        userName = sc.next();
 
-        loginRequest = new LoginReguest();
-        ((LoginReguest)loginRequest).setLogin(userName);
-        sendRequest(loginRequest);
-
-        try {
-            message = (String) objectInputStream.readObject();
-            System.out.println(message);
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-
-        if(message.equals("OK")) {
-            loggedIn = true;
-        }
-
-        if(loggedIn){
-            System.out.println("Hello " + userName);
-            while (flag) {
-                System.out.println("\nChoose action: \n1 - Display accounts information \n" +
-                        "2 - Withdraw \n" +
-                        "3 - Logout \n$> ");
+            if(!loggedIn) {
+                System.out.println("Welcome in super Bank \nEnter your name to login into system \n$> ");
                 userName = sc.next();
 
-                switch (userName) {
-                    case "1":
-                        getActiveAccountRequest = new GetAccountsInfoRequest();
-                        sendRequest(getActiveAccountRequest);
-                        try {
-                            message = (String)objectInputStream.readObject();
-                            System.out.println(message);
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        } catch (ClassNotFoundException e) {
-                            e.printStackTrace();
-                        }
-                        break;
-                    case "2":
-                        flag = true;
-                        while(flag) {
-                            System.out.println("Chose account: \n1 - Saving Account \n2 - Checking Account \n3 - Back\n$>");
-                            userInput = sc.next();
-                            switch (userInput) {
-                                case "1":
-                                    changeActiveAccountRequest = new ChangeActiveAccountRequest(AccountType.SAVING_ACCOUNT);
-                                    sendRequest(changeActiveAccountRequest);
-                                    try {
-                                        message = (String)objectInputStream.readObject();
-                                        activeAccountChoosen = true;
-                                        flag = false;
-                                    } catch (IOException e) {
-                                        e.printStackTrace();
-                                    } catch (ClassNotFoundException e) {
-                                        e.printStackTrace();
-                                    }
-                                    break;
-                                case "2":
-                                    changeActiveAccountRequest = new ChangeActiveAccountRequest(AccountType.CHECKING_ACCOUNT);
-                                    sendRequest(changeActiveAccountRequest);
-                                    try {
-                                        message = (String)objectInputStream.readObject();
-                                        activeAccountChoosen = true;
-                                        flag = false;
-                                    } catch (IOException e) {
-                                        e.printStackTrace();
-                                    } catch (ClassNotFoundException e) {
-                                        e.printStackTrace();
-                                    }
-                                    break;
-                                case "3":
-                                    activeAccountChoosen = false;
-                                    loggedIn = true;
-                                    flag = false;
-                                    break;
-                                default:
-                                    System.out.println("No such option");
-                                    break;
-                            }
-                        }
-                        if(activeAccountChoosen) {
-                            System.out.println("Enter amount ");
-                            userInput = sc.next();
-                            withdrawRequest = new WithdrawRequest();
-                            ((WithdrawRequest) withdrawRequest).setAmountToWithdraw(Float.valueOf(userInput));
-                            sendRequest(withdrawRequest);
+                loginRequest = new LoginReguest();
+                ((LoginReguest) loginRequest).setLogin(userName);
+                sendRequest(loginRequest);
+
+                try {
+                    message = (String) objectInputStream.readObject();
+                    System.out.println(message);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (ClassNotFoundException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (message.equals("OK")) {
+                loggedIn = true;
+            }
+
+            if (loggedIn) {
+                System.out.println("Hello " + userName);
+                flag = true;
+                while (flag) {
+                    System.out.println("\nChoose action: \n1 - Display accounts information \n" +
+                            "2 - Withdraw \n" +
+                            "3 - Logout \n$> ");
+                    userName = sc.next();
+
+                    switch (userName) {
+                        case "1":
+                            getActiveAccountRequest = new GetAccountsInfoRequest();
+                            sendRequest(getActiveAccountRequest);
                             try {
                                 message = (String) objectInputStream.readObject();
                                 System.out.println(message);
@@ -133,24 +78,70 @@ public class BankClient {
                             } catch (ClassNotFoundException e) {
                                 e.printStackTrace();
                             }
-                        }
-                        break;
-                    case "3":
-                        logoutRequest = new LogoutRequest();
-                        sendRequest(logoutRequest);
-                        ((LoginReguest) loginRequest).setLogin("");
-                        loggedIn = false;
-                        flag = false;
-                        break;
-                    default:
-                        System.out.println("No such option ");
-                        break;
+                            break;
+                        case "2":
+                            flag = true;
+                            while (flag) {
+                                System.out.println("Chose account: \n1 - Saving Account \n2 - Checking Account \n3 - Back\n$>");
+                                userInput = sc.next();
+                                switch (userInput) {
+                                    case "1":
+                                        changeActiveAccountRequest = new ChangeActiveAccountRequest(AccountType.SAVING_ACCOUNT);
+                                        sendRequest(changeActiveAccountRequest);
+                                        try {
+                                            message = (String) objectInputStream.readObject();
+                                            activeAccountChoosen = true;
+                                            performWithdraw();
+                                            loggedIn = true;
+                                            flag = false;
+                                        } catch (IOException e) {
+                                            e.printStackTrace();
+                                        } catch (ClassNotFoundException e) {
+                                            e.printStackTrace();
+                                        }
+                                        break;
+                                    case "2":
+                                        changeActiveAccountRequest = new ChangeActiveAccountRequest(AccountType.CHECKING_ACCOUNT);
+                                        sendRequest(changeActiveAccountRequest);
+                                        try {
+                                            message = (String) objectInputStream.readObject();
+                                            activeAccountChoosen = true;
+                                            performWithdraw();
+                                            loggedIn = true;
+                                            flag = false;
+                                        } catch (IOException e) {
+                                            e.printStackTrace();
+                                        } catch (ClassNotFoundException e) {
+                                            e.printStackTrace();
+                                        }
+                                        break;
+                                    case "3":
+                                        activeAccountChoosen = false;
+                                        loggedIn = true;
+                                        flag = false;
+                                        break;
+                                    default:
+                                        System.out.println("No such option");
+                                        break;
+                                }
+                            }
+                            break;
+                        case "3":
+                            logoutRequest = new LogoutRequest();
+                            sendRequest(logoutRequest);
+                            ((LoginReguest) loginRequest).setLogin("");
+                            loggedIn = false;
+                            flag = false;
+                            break;
+                        default:
+                            System.out.println("No such option ");
+                            break;
+                    }
                 }
+            } else {
+                System.out.println("No user " + userName + " found in database ");
             }
-        }else {
-           System.out.println("No user " + userName + " found in database ");
         }
-    }
 
 
     public void run() {
@@ -231,6 +222,25 @@ public class BankClient {
             e.printStackTrace();
         }
         return message;
+    }
+
+    private void performWithdraw() {
+
+        if(activeAccountChoosen) {
+            System.out.println("Enter amount ");
+            userInput = sc.next();
+            withdrawRequest = new WithdrawRequest();
+            ((WithdrawRequest) withdrawRequest).setAmountToWithdraw(Float.valueOf(userInput));
+            sendRequest(withdrawRequest);
+            try {
+                message = (String) objectInputStream.readObject();
+                System.out.println(message);
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     public static void main(String[] args) {

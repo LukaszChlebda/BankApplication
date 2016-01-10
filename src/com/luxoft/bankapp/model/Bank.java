@@ -7,7 +7,7 @@ import com.sun.org.apache.xpath.internal.SourceTree;
 import java.util.*;
 
 
-public class Bank implements Report{
+public class Bank implements Report {
 
 	private Set<Client> clients;
 	private Map<String, Client> mapOfClients;
