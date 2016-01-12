@@ -34,7 +34,7 @@ public class BankClient{
     boolean flag = true;
     String userName;
 
-    public void serviceRequest() {
+    public synchronized void serviceRequest() {
 
             if(!loggedIn) {
                 System.out.println("Welcome in super Bank \nEnter your name to login into system \n$> ");

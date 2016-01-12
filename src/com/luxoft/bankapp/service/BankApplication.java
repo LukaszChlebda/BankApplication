@@ -5,6 +5,7 @@ import com.luxoft.bankapp.exceptions.ClientNotFoundException;
 import com.luxoft.bankapp.exceptions.NotEnoughtFundsException;
 import com.luxoft.bankapp.model.*;
 import com.luxoft.bankapp.server.BankServer;
+import com.luxoft.bankapp.server.BankServerThreaded;
 
 public class BankApplication {
 
@@ -12,8 +13,10 @@ public class BankApplication {
         BankService bService = new BankServiceImpl();
         Bank bank = BankApplication.initialize(bService);
 
-		BankServer bankServer = new BankServer(bank);
-		bankServer.run();
+		//BankServer bankServer = new BankServer(bank);
+
+		//bankServer.run();
+		//BankServerThreaded bankServerThreaded = new BankServerThreaded();
 
 
 //        printBankReport(bank);
