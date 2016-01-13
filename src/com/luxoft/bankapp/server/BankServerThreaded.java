@@ -9,24 +9,38 @@ import com.luxoft.bankapp.service.Gender;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Queue;
+import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Created by LChlebda on 2016-01-12.
  */
 public class BankServerThreaded {
 
+    CounterService counterService = new CounterServiceImpl();
+
     private ServerSocket serverSocket;
     private ExecutorService executorServicePool;
-    private final int POOL_SIZE = 10;
+    private final int POOL_SIZE = 3;
+
     private Bank bank;
+
+    private List<Socket> clientSocketList = new LinkedList<>();
+
+    //int temp = 0;
+    int temp2 = 0;
 
     public BankServerThreaded(Bank bank) {
         try {
             this.bank = bank;
             serverSocket = new ServerSocket(2004);
-            executorServicePool = Executors.newFixedThreadPool(POOL_SIZE);
+            //executorServicePool = Executors.newFixedThreadPool(POOL_SIZE);
         }catch (IOException e) {
             e.printStackTrace();
         }
@@ -37,11 +51,28 @@ public class BankServerThreaded {
         while(true) {
             try {
                 Socket clientSocket = serverSocket.accept();
-                executorServicePool.execute(new ServerThread(clientSocket, bank));
+//                clientSocketList.add(serverSocket.accept());
+//                executorServicePool.submit(new ServerThread(clientSocket, bank, counterService));
+//                //executorServicePool.execute(new ServerThread(clientSocketList.get(0), bank, counterService));
+//                clientSocketList.remove(0);
+ //               System.out.println(clientSocketList.size());
+                executeConnectionsTasks(clientSocket);
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
+    }
+
+    public synchronized void executeConnectionsTasks(Socket clientSocket) {
+        executorServicePool = Executors.newFixedThreadPool(POOL_SIZE);
+        int globalUsersCounter = counterService.getCounter().intValue();
+
+            if (globalUsersCounter < POOL_SIZE) {
+                executorServicePool.submit(new ServerThread(clientSocket, bank, counterService));
+            } else {
+                globalUsersCounter++;
+            }
+
     }
 
     public static void main(String[] args) {
@@ -51,7 +82,7 @@ public class BankServerThreaded {
         sb.start();
     }
 
-    //------------------------------------------------------------------
+    //----------------------Temporary bank---------------------------------
     public static Bank initialize(BankService bService) {
 
         Client client1 = new Client("Lukasz","Krakow","lukasz@gmail.com","123456789", Gender.MALE,1000);
