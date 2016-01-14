@@ -1,6 +1,7 @@
-package com.luxoft.bankapp.server;
+package com.luxoft.bankapp.test;
 
 import com.luxoft.bankapp.model.Client;
+import com.luxoft.bankapp.server.*;
 import com.luxoft.bankapp.service.AccountType;
 
 import java.io.IOException;
@@ -14,7 +15,7 @@ import java.util.concurrent.RunnableFuture;
 /**
  * Created by LChlebda on 2016-01-04.
  */
-public class BankClient{
+public class BankClientMock implements Runnable{
     Socket requestSocket;
     ObjectOutputStream objectOutputStream;
     ObjectInputStream objectInputStream;
@@ -30,17 +31,23 @@ public class BankClient{
     private Request getActiveAccountRequest;
     private Request changeActiveAccountRequest;
     private Request withdrawRequest;
-//    Request[] requests = {loginRequest};
+    //    Request[] requests = {loginRequest};
     boolean flag = true;
     boolean globalFlag = true;
     String userName;
+
+    private int withdrowCounter = 0;
+
+    public BankClientMock(String userName) {
+        this.userName = userName;
+    }
 
     public synchronized void serviceRequest() {
 
         if (globalFlag) {
             if (!loggedIn) {
                 System.out.println("Welcome in super Bank \nEnter your name to login into system \n$> ");
-                userName = sc.next();
+                //userName = sc.next();
 
                 loginRequest = new LoginReguest();
                 ((LoginReguest) loginRequest).setLogin(userName);
@@ -66,7 +73,11 @@ public class BankClient{
                     System.out.println("\nChoose action: \n1 - Display accounts information \n" +
                             "2 - Withdraw \n" +
                             "3 - Logout \n$> ");
-                    userName = sc.next();
+                    if(withdrowCounter<1){
+                        userName = "2";
+                    }else
+                        userName="3";
+
 
                     switch (userName) {
                         case "1":
@@ -85,7 +96,7 @@ public class BankClient{
                             flag = true;
                             while (flag) {
                                 System.out.println("Chose account: \n1 - Saving Account \n2 - Checking Account \n3 - Back\n$>");
-                                userInput = sc.next();
+                                userInput = "1";
                                 switch (userInput) {
                                     case "1":
                                         changeActiveAccountRequest = new ChangeActiveAccountRequest(AccountType.SAVING_ACCOUNT);
@@ -94,6 +105,7 @@ public class BankClient{
                                             message = (String) objectInputStream.readObject();
                                             activeAccountChoosen = true;
                                             performWithdraw();
+                                            withdrowCounter++;
                                             loggedIn = true;
                                             flag = false;
                                         } catch (IOException e) {
@@ -159,12 +171,13 @@ public class BankClient{
                 System.out.println(message);
 
                 do {
-                    serviceRequest();
-                    flag = false;
-                    if(!flag) {
-                        message = "bye";
+                    synchronized (this) {
+                        serviceRequest();
+                        flag = false;
+                        if (!flag) {
+                            message = "bye";
+                        }
                     }
-
                 } while (!message.equals("bye"));
 
 
@@ -237,7 +250,7 @@ public class BankClient{
 
         if(activeAccountChoosen) {
             System.out.println("Enter amount ");
-            userInput = sc.next();
+            userInput = "1";
             withdrawRequest = new WithdrawRequest();
             ((WithdrawRequest) withdrawRequest).setAmountToWithdraw(Float.valueOf(userInput));
             sendRequest(withdrawRequest);
@@ -250,10 +263,5 @@ public class BankClient{
                 e.printStackTrace();
             }
         }
-    }
-
-    public static void main(String[] args) {
-        BankClient bankClient = new BankClient();
-        bankClient.run();
     }
 }

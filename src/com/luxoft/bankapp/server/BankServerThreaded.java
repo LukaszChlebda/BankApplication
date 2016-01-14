@@ -23,11 +23,12 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public class BankServerThreaded {
 
-    CounterService counterService = new CounterServiceImpl();
 
+    CounterService counterService = new CounterServiceImpl();
+    private BankServerMonitor bankServerMonitor = new BankServerMonitor(counterService);
     private ServerSocket serverSocket;
     private ExecutorService executorServicePool;
-    private final int POOL_SIZE = 3;
+    private final int POOL_SIZE = 1000;
 
     private Bank bank;
 
@@ -47,15 +48,11 @@ public class BankServerThreaded {
     }
 
     public void start() {
+        bankServerMonitor.start();
         System.out.println("Code is working ");
         while(true) {
             try {
                 Socket clientSocket = serverSocket.accept();
-//                clientSocketList.add(serverSocket.accept());
-//                executorServicePool.submit(new ServerThread(clientSocket, bank, counterService));
-//                //executorServicePool.execute(new ServerThread(clientSocketList.get(0), bank, counterService));
-//                clientSocketList.remove(0);
- //               System.out.println(clientSocketList.size());
                 executeConnectionsTasks(clientSocket);
             } catch (IOException e) {
                 e.printStackTrace();
@@ -66,13 +63,7 @@ public class BankServerThreaded {
     public synchronized void executeConnectionsTasks(Socket clientSocket) {
         executorServicePool = Executors.newFixedThreadPool(POOL_SIZE);
         int globalUsersCounter = counterService.getCounter().intValue();
-
-            if (globalUsersCounter < POOL_SIZE) {
-                executorServicePool.submit(new ServerThread(clientSocket, bank, counterService));
-            } else {
-                globalUsersCounter++;
-            }
-
+        executorServicePool.submit(new ServerThread(clientSocket, bank, counterService));
     }
 
     public static void main(String[] args) {

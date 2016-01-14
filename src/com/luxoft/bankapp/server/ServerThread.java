@@ -25,12 +25,14 @@ public class ServerThread implements Runnable {
     ObjectOutputStream objectOutputStream;
     ObjectInputStream objectInputStream;
 
+
     private Object monitor = new Object();
     volatile private AtomicInteger usersCounter = new AtomicInteger(0);
     volatile public int usersCounterTest = 0;
     String message = "asa";
     Request requestMessage;
     private CounterService counterService;
+
 
     Request getRequest;
 
@@ -101,9 +103,8 @@ public class ServerThread implements Runnable {
             synchronized (this) {
             do {
                 try {
-                        System.out.println("Counter : " + counterService.getCounter());
-                        requestMessage = (Request) objectInputStream.readObject();
-                        System.out.println("Request type " + requestMessage.getRequestType());
+                    requestMessage = (Request) objectInputStream.readObject();
+                    System.out.println("Request type " + requestMessage.getRequestType());
 
                         getRequest(requestMessage);
                     }catch(RequestNotFoundException e){

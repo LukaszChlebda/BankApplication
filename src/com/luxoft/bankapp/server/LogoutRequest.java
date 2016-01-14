@@ -14,7 +14,7 @@ public class LogoutRequest implements Request{
 
 
     public String getRequestInfo() {
-        return "You are logged out ";
+        return "bye";
     }
 
     @Override

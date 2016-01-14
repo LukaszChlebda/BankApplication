@@ -72,23 +72,23 @@ public class BankServer {
 
 
     public void run() {
-        try {
-            providerSocket = new ServerSocket(2004, 10);
-            System.out.println("Server waiting for connection ");
-            connection = providerSocket.accept();
+            try {
+                providerSocket = new ServerSocket(2004, 10);
+                System.out.println("Server waiting for connection ");
+                connection = providerSocket.accept();
 
-            System.out.println("Connection received from " + connection.getInetAddress().getHostName());
+                System.out.println("Connection received from " + connection.getInetAddress().getHostName());
 
-            objectOutputStream = new ObjectOutputStream(connection.getOutputStream());
-            objectOutputStream.flush();
+                objectOutputStream = new ObjectOutputStream(connection.getOutputStream());
+                objectOutputStream.flush();
 
-            objectInputStream = new ObjectInputStream(connection.getInputStream());
-            sendMessage("Connection successful");
+                objectInputStream = new ObjectInputStream(connection.getInputStream());
+                sendMessage("Connection successful");
 
-            do{
+                do {
                     try {
 
-                        requestMessage = (Request)objectInputStream.readObject();
+                        requestMessage = (Request) objectInputStream.readObject();
                         System.out.println("Request type " + requestMessage.getRequestType());
                         getRequest(requestMessage);
                     } catch (RequestNotFoundException e) {
@@ -97,19 +97,19 @@ public class BankServer {
                         e.printStackTrace();
                     }
 
-            }while (!message.equals("bye"));
+                } while (!message.equals("bye"));
 
-        }catch (IOException e) {
-            e.printStackTrace();
-        }finally {
-            try {
-                objectInputStream.close();
-                objectOutputStream.close();
-                providerSocket.close();
-            }catch (IOException e) {
+            } catch (IOException e) {
                 e.printStackTrace();
+            } finally {
+                try {
+                    objectInputStream.close();
+                    objectOutputStream.close();
+                    providerSocket.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
-        }
     }
 
     public void sendMessage(String message) {
