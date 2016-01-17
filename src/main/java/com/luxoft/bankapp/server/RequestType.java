@@ -5,7 +5,8 @@ package com.luxoft.bankapp.server;
  */
 public enum RequestType {
     LOGIN_REQUEST("loginRequest"), WITHDRAW_REQUEST("withdrawRequest"), LOGOUT_REQUEST("logoutRequest"),
-    CHANGE_ACTIVE_ACCOUNT("changeActiveAccountRequest"), GET_ACCOUNTS_INFO("getAccountsInfoRequest");
+    CHANGE_ACTIVE_ACCOUNT("changeActiveAccountRequest"), GET_ACCOUNTS_INFO("getAccountsInfoRequest"),
+    CLIENT_END_REQUEST("clientEndRequest");
 
     String requestType;
 

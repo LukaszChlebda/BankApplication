@@ -67,7 +67,8 @@ public class CheckingAccount extends AbstractAccount implements Serializable{
     public void withdraw(float amount) throws OverDraftLimitExceededException{
 		float limit = getBalance()+overdraft;
 		if(amount > getBalance()+overdraft) {
-			System.out.println("You trying withdraw " + amount + " Not enough founds, your limit is: " + limit);
+			//System.out.println("You trying withdraw " + amount + " Not enough founds, your limit is: " + limit);
+			throw new OverDraftLimitExceededException(this, amount);
 		}else {
                 setBalance(getBalance()-amount);
 		}

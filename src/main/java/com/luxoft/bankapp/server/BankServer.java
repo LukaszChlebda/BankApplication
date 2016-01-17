@@ -12,25 +12,32 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by LChlebda on 2016-01-04.
  */
 public class BankServer {
     private Bank bank = null;
-    ServerSocket providerSocket;
-    Socket connection = null;
+    private ServerSocket providerSocket;
+    private Socket connection = null;
     private Client activeClient;
-    ObjectOutputStream objectOutputStream;
-    ObjectInputStream objectInputStream;
+    private ObjectOutputStream objectOutputStream;
+    private ObjectInputStream objectInputStream;
 
-    String message = "asa";
-    Request requestMessage;
+    private String message;
+    private Request requestMessage;
 
-    Request getRequest;
+    private Map<RequestType, Request> requestMap;
+    private Request[] requests;
+
+
 
     public BankServer(Bank bank) {
         this.bank = bank;
+        requestMap = new HashMap<>();
+        message = "";
     }
 
     public void getRequest(Request requestMessage) throws RequestNotFoundException {
@@ -52,6 +59,7 @@ public class BankServer {
             activeClient.setActiveAccount(activeClient.getAccounts().get(((ChangeActiveAccountRequest)requestMessage).getActiveAccount()));
             sendMessage("OK");
         } else if (requestMessage.getRequestType() == RequestType.GET_ACCOUNTS_INFO) {
+            message = "Client " + activeClient.getName() + "\n";
             message = activeClient.getAccountsInfo();
             activeClient.setActiveAccount(activeClient.getAccounts().get(0));
             sendMessage(message);
@@ -65,7 +73,10 @@ public class BankServer {
                 sendMessage("Not enough founds");
             }
 
-        } else {
+        }else if(requestMessage.getRequestType() == RequestType.CLIENT_END_REQUEST) {
+            message = "bye";
+            sendMessage("bye");
+        }else{
             throw new RequestNotFoundException();
         }
     }
@@ -73,31 +84,30 @@ public class BankServer {
 
     public void run() {
             try {
-                providerSocket = new ServerSocket(2004, 10);
-                System.out.println("Server waiting for connection ");
-                connection = providerSocket.accept();
+                    providerSocket = new ServerSocket(2004, 10);
+                    System.out.println("Server waiting for connection ");
+                    connection = providerSocket.accept();
 
-                System.out.println("Connection received from " + connection.getInetAddress().getHostName());
+                    System.out.println("Connection received from " + connection.getInetAddress().getHostName());
 
-                objectOutputStream = new ObjectOutputStream(connection.getOutputStream());
-                objectOutputStream.flush();
+                    objectOutputStream = new ObjectOutputStream(connection.getOutputStream());
+                    objectOutputStream.flush();
 
-                objectInputStream = new ObjectInputStream(connection.getInputStream());
-                sendMessage("Connection successful");
+                    objectInputStream = new ObjectInputStream(connection.getInputStream());
+                    sendMessage("Connection successful");
 
-                do {
-                    try {
+                    do {
+                        try {
+                            requestMessage = (Request) objectInputStream.readObject();
+                            System.out.println("Request type " + requestMessage.getRequestType());
+                            getRequest(requestMessage);
+                        } catch (RequestNotFoundException e) {
+                            e.printStackTrace();
+                        } catch (ClassNotFoundException e) {
+                            e.printStackTrace();
+                        }
 
-                        requestMessage = (Request) objectInputStream.readObject();
-                        System.out.println("Request type " + requestMessage.getRequestType());
-                        getRequest(requestMessage);
-                    } catch (RequestNotFoundException e) {
-                        e.printStackTrace();
-                    } catch (ClassNotFoundException e) {
-                        e.printStackTrace();
-                    }
-
-                } while (!message.equals("bye"));
+                    } while (true);
 
             } catch (IOException e) {
                 e.printStackTrace();
@@ -111,6 +121,12 @@ public class BankServer {
                 }
             }
     }
+
+//    private void initRequests() {
+//        requests = new Request[] {
+//
+//        }
+//    }
 
     public void sendMessage(String message) {
         try {

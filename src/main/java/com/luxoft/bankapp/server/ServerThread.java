@@ -19,28 +19,24 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class ServerThread implements Runnable {
 
     private Bank bank = null;
-    ServerSocket providerSocket;// = new ServerSocket(2004, 10);
-    Socket connection = null;
+    private ServerSocket providerSocket;
+    private Socket connection = null;
     private Client activeClient;
-    ObjectOutputStream objectOutputStream;
-    ObjectInputStream objectInputStream;
+    private ObjectOutputStream objectOutputStream;
+    private ObjectInputStream objectInputStream;
 
 
     private Object monitor = new Object();
-    volatile private AtomicInteger usersCounter = new AtomicInteger(0);
-    volatile public int usersCounterTest = 0;
-    String message = "asa";
-    Request requestMessage;
+    private String message;
+    private Request requestMessage;
     private CounterService counterService;
-
-
-    Request getRequest;
 
     public ServerThread(Socket clientSocket, Bank bank, CounterService counterService) {
 
         this.connection = clientSocket;
         this.bank = bank;
         this.counterService = counterService;
+        message = "";
     }
 
     public synchronized void getRequest(Request requestMessage) throws RequestNotFoundException {
@@ -88,16 +84,13 @@ public class ServerThread implements Runnable {
 
     public void run() {
         try {
-            //providerSocket = new ServerSocket(2004, 10);
             System.out.println("Server waiting for connection ");
-            //connection = providerSocket.accept();
-
             System.out.println("Connection received from " + connection.getInetAddress().getHostName());
 
             objectOutputStream = new ObjectOutputStream(connection.getOutputStream());
             objectOutputStream.flush();
-
             objectInputStream = new ObjectInputStream(connection.getInputStream());
+
             sendMessage("Connection successful");
 
             synchronized (this) {

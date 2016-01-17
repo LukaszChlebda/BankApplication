@@ -13,11 +13,11 @@ public class BankApplication {
         BankService bService = new BankServiceImpl();
         Bank bank = BankApplication.initialize(bService);
 
-		//BankServer bankServer = new BankServer(bank);
+		BankServer bankServer = new BankServer(bank);
 
 		//bankServer.run();
-		//BankServerThreaded bankServerThreaded = new BankServerThreaded();
-
+		BankServerThreaded bankServerThreaded = new BankServerThreaded(bank);
+		bankServerThreaded.start();
 
 //        printBankReport(bank);
 //        modifyBank(bank);

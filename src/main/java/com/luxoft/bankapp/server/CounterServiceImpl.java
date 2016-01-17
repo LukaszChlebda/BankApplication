@@ -12,7 +12,9 @@ public class CounterServiceImpl implements CounterService{
     }
 
     public synchronized void decrementUserCounter() {
-        usersCounter.getAndDecrement();
+        if(usersCounter.get() > 0) {
+            usersCounter.getAndDecrement();
+        }
     }
 
     public synchronized AtomicInteger getCounter() {

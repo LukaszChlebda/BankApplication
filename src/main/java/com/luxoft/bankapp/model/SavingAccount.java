@@ -29,11 +29,11 @@ public class SavingAccount extends AbstractAccount implements Serializable{
     }
 
     @Override
-    public void withdraw(float x) throws NotEnoughtFundsException{
-        if(getBalance() >= x) {
-            setBalance(getBalance()-x);
+    public void withdraw(float amount) throws NotEnoughtFundsException{
+        if(getBalance() >= amount) {
+            setBalance(getBalance()-amount);
         }else {
-        	throw new NotEnoughtFundsException(this, x);
+        	throw new NotEnoughtFundsException(this, amount);
         }
     }
 

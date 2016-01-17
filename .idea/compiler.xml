@@ -25,8 +25,8 @@
         <module name="BankApplication" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
-      <module name="BankApplication" target="1.5" />
+    <bytecodeTargetLevel target="1.8">
+      <module name="BankApplication" target="1.8" />
     </bytecodeTargetLevel>
   </component>
 </project>

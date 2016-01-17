@@ -20,15 +20,6 @@ import static junit.framework.TestCase.assertEquals;
 public class BankServerThreadedTest {
 
     List<Thread> t = new ArrayList<Thread>();
-//    @Before
-//    public void  prepareTest() {
-//
-//
-//
-//
-//
-//    }
-
     @Test
     public void testMockClient() {
         float amount = 10000;
@@ -36,7 +27,7 @@ public class BankServerThreadedTest {
         Client client = null;
 
         for(int i=0; i<5; i++) {
-            t.add(new Thread(new BankClientMock("Lukasz")));
+            t.add(new Thread(new BankClientMock("Lukasz", 1f)));
         }
 
         for (int i = 0; i <5; i ++) {
