@@ -56,7 +56,7 @@ public class BankApplication {
 			System.out.println(e.getMessage());
 		}
 
-		Account savingAccount1 = new SavingAccount(2000);
+		Account savingAccount1 = new SavingAccount(52000);
 		Account checkingAccount1 = new CheckingAccount(1000,1000);
         bService.addAccount(client1,savingAccount1);
         bService.addAccount(client1, checkingAccount1);

@@ -122,6 +122,10 @@ public class ServerThread implements Runnable {
 
     }
 
+    public Bank getBank() {
+        return bank;
+    }
+
     public synchronized void sendMessage(String message) {
         try {
             objectOutputStream.writeObject(message);
