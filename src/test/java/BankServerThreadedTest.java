@@ -1,14 +1,8 @@
-import com.luxoft.bankapp.exceptions.ClientExistsException;
 import com.luxoft.bankapp.exceptions.ClientNotFoundException;
 import com.luxoft.bankapp.model.*;
-import com.luxoft.bankapp.server.BankServerThreaded;
 import com.luxoft.bankapp.service.BankApplication;
-import com.luxoft.bankapp.service.BankService;
-import com.luxoft.bankapp.service.BankServiceImpl;
-import com.luxoft.bankapp.service.Gender;
 import org.junit.Before;
 import org.junit.Test;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,31 +13,53 @@ import static junit.framework.TestCase.assertEquals;
  */
 public class BankServerThreadedTest {
 
-    List<Thread> t = new ArrayList<Thread>();
-    @Test
-    public void testMockClient() {
-        float amount = 10000;
+    List<Thread> t = new ArrayList<>();
 
-        Client client = null;
+    Bank bank = BankApplication.getBankInstance();
+    int loopIteration = 1000;
+    double amount, amount1;
+    Client client;
 
-        for(int i=0; i<5; i++) {
-            t.add(new Thread(new BankClientMock("Lukasz", 1f)));
+    @Before
+    public void prepereTest() {
+        try {
+            client = bank.getClient("Lukasz");
+        } catch (ClientNotFoundException e) {
+            e.printStackTrace();
+        }
+        amount = client.getAccounts().get(0).getBalance();
+        System.out.println("\n" + amount);
+
+
+        for (int i = 0; i < loopIteration; i++) {
+            t.add(new Thread(new BankClientMock()));
         }
 
-        for (int i = 0; i <5; i ++) {
+        for (int i = 0; i < loopIteration; i++) {
             t.get(i).start();
-        }
-
-        for(int i =0; i < 5; i++) {
             try {
-                t.get(i).join ();
+                t.get(i).join();
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-        }
 
-        double amount2 = 9000;//client.getAccounts().get(0).getBalance();
-        assertEquals(amount-1000, amount2,0.1);
+        }
+    }
+
+
+    @Test
+    public void testMockClient() {
+        Client client1 = null;
+
+        try {
+            client1 = bank.getClient("Lukasz");
+        } catch (ClientNotFoundException e) {
+            e.printStackTrace();
+        }
+        amount1 = client1.getAccounts().get(0).getBalance();
+
+        System.out.println(amount1);
+        assertEquals(amount-loopIteration, amount1);
         System.out.println("Test");
     }
 }

@@ -4,9 +4,8 @@ import com.luxoft.bankapp.exceptions.NotEnoughtFundsException;
 
 import java.io.Serializable;
 
-
 public class SavingAccount extends AbstractAccount implements Serializable{
-
+    private Object monitor = new Object();
     public SavingAccount(){};
 	
 	public SavingAccount(float balance){
@@ -30,10 +29,12 @@ public class SavingAccount extends AbstractAccount implements Serializable{
 
     @Override
     public void withdraw(float amount) throws NotEnoughtFundsException{
-        if(getBalance() >= amount) {
-            setBalance(getBalance()-amount);
-        }else {
-        	throw new NotEnoughtFundsException(this, amount);
+        synchronized (monitor) {
+            if (getBalance() >= amount) {
+                setBalance(getBalance() - amount);
+            } else {
+                throw new NotEnoughtFundsException(this, amount);
+            }
         }
     }
 

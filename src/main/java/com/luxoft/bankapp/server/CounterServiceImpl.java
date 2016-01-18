@@ -7,7 +7,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public class CounterServiceImpl implements CounterService{
     private volatile AtomicInteger usersCounter = new AtomicInteger(0);
-    public synchronized void incrementUserCunter() {
+    public synchronized void incrementUserCounter() {
         usersCounter.getAndIncrement();
     }
 

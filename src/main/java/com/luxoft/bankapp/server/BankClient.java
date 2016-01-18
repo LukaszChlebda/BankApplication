@@ -54,7 +54,6 @@ public class BankClient {
             } catch (ClassNotFoundException e) {
                 e.printStackTrace();
             }
-
         }
     }
 
@@ -89,6 +88,18 @@ public class BankClient {
         } catch (IOException ioException) {
             ioException.printStackTrace();
         }
+    }
+
+    public String getMessage() {
+        String recivedMessage = null;
+        try {
+            recivedMessage = (String)objectInputStream.readObject();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return recivedMessage;
     }
 
     public static void main(String[] args) {

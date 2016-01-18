@@ -31,11 +31,11 @@ public abstract class AbstractAccount implements Account {
 	}
 
 	@Override
-	public float getBalance() {
+	public synchronized float getBalance() {
 		return balance;
 	}
 	
-	public void setBalance(float balance) throws IllegalArgumentException {
+	public  void setBalance(float balance) throws IllegalArgumentException {
 			this.balance = balance;
 	}
 

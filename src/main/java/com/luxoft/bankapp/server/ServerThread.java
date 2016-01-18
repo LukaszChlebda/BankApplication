@@ -11,7 +11,6 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Created by LChlebda on 2016-01-12.
@@ -27,7 +26,7 @@ public class ServerThread implements Runnable {
 
 
     private Object monitor = new Object();
-    private String message;
+    private volatile String message;
     private Request requestMessage;
     private CounterService counterService;
 
@@ -43,8 +42,8 @@ public class ServerThread implements Runnable {
         if (requestMessage.getRequestType() == RequestType.LOGIN_REQUEST) {
             try {
                 System.out.println("Checking user in database ");
-                activeClient = bank.getClient(((LoginReguest)requestMessage).getLogin());
-                counterService.incrementUserCunter();
+                activeClient = bank.getClient(((LoginReguest) requestMessage).getLogin());
+                counterService.incrementUserCounter();
                 sendMessage("OK");
 
 
@@ -54,13 +53,14 @@ public class ServerThread implements Runnable {
             }
 
         } else if (requestMessage.getRequestType() == RequestType.LOGOUT_REQUEST) {
-            message = ((LogoutRequest)requestMessage).getRequestInfo();
+            message = null;
+            message = ((LogoutRequest) requestMessage).getRequestInfo();
             System.out.println(message);
             //usersCounter.getAndDecrement();
             counterService.decrementUserCounter();
 
         } else if (requestMessage.getRequestType() == RequestType.CHANGE_ACTIVE_ACCOUNT) {
-            activeClient.setActiveAccount(activeClient.getAccounts().get(((ChangeActiveAccountRequest)requestMessage).getActiveAccount()));
+            activeClient.setActiveAccount(activeClient.getAccounts().get(((ChangeActiveAccountRequest) requestMessage).getActiveAccount()));
             sendMessage("OK");
         } else if (requestMessage.getRequestType() == RequestType.GET_ACCOUNTS_INFO) {
             message = activeClient.getAccountsInfo();
@@ -69,7 +69,7 @@ public class ServerThread implements Runnable {
 
         } else if (requestMessage.getRequestType() == RequestType.WITHDRAW_REQUEST) {
             try {
-                activeClient.getActiveAccount().withdraw(((WithdrawRequest)requestMessage).getAmountToWithdraw());
+                activeClient.getActiveAccount().withdraw(((WithdrawRequest) requestMessage).getAmountToWithdraw());
                 message = activeClient.getAccountsInfo();
                 sendMessage("OK \n" + message);
             } catch (NotEnoughtFundsException e) {
@@ -82,8 +82,9 @@ public class ServerThread implements Runnable {
     }
 
 
-    public void run() {
+    public synchronized void run() {
         try {
+
             System.out.println("Server waiting for connection ");
             System.out.println("Connection received from " + connection.getInetAddress().getHostName());
 
@@ -93,27 +94,27 @@ public class ServerThread implements Runnable {
 
             sendMessage("Connection successful");
 
-            synchronized (this) {
+
             do {
                 try {
                     requestMessage = (Request) objectInputStream.readObject();
                     System.out.println("Request type " + requestMessage.getRequestType());
 
-                        getRequest(requestMessage);
-                    }catch(RequestNotFoundException e){
-                        e.printStackTrace();
-                    }catch(ClassNotFoundException e){
-                        e.printStackTrace();
-                    }
-                } while (!message.equals("bye")) ;
-            }
+                    getRequest(requestMessage);
+                } catch (RequestNotFoundException e) {
+                    e.printStackTrace();
+                } catch (ClassNotFoundException e) {
+                    e.printStackTrace();
+                }
+            } while (!message.equals("bye"));
+
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
             try {
                 objectInputStream.close();
                 objectOutputStream.close();
-                providerSocket.close();
+                connection.close();
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -121,7 +122,7 @@ public class ServerThread implements Runnable {
 
     }
 
-    public void sendMessage(String message) {
+    public synchronized void sendMessage(String message) {
         try {
             objectOutputStream.writeObject(message);
             objectOutputStream.flush();

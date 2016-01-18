@@ -28,7 +28,7 @@ public class BankServerThreaded {
     private BankServerMonitor bankServerMonitor = new BankServerMonitor(counterService);
     private ServerSocket serverSocket;
     private ExecutorService executorServicePool;
-    private final int POOL_SIZE = 1000;
+    private final int POOL_SIZE = 2000;
 
     private Bank bank;
 
@@ -38,22 +38,30 @@ public class BankServerThreaded {
     int temp2 = 0;
 
     public BankServerThreaded(Bank bank) {
-        try {
+//        try {
             this.bank = bank;
-            serverSocket = new ServerSocket(2004);
+//            serverSocket = new ServerSocket(2004);
             //executorServicePool = Executors.newFixedThreadPool(POOL_SIZE);
-        }catch (IOException e) {
-            e.printStackTrace();
-        }
+//        }catch (IOException e) {
+//            e.printStackTrace();
+//        }
+
     }
 
     public void start() {
+        ServerSocket serverSocket = null;
+        try {
+            serverSocket = new ServerSocket(2004);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        ExecutorService pool = Executors.newFixedThreadPool(POOL_SIZE);
         bankServerMonitor.start();
         System.out.println("Code is working ");
         while(true) {
             try {
                 Socket clientSocket = serverSocket.accept();
-                executeConnectionsTasks(clientSocket);
+                pool.execute(new ServerThread(clientSocket, bank, counterService));
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -63,15 +71,16 @@ public class BankServerThreaded {
     public synchronized void executeConnectionsTasks(Socket clientSocket) {
         executorServicePool = Executors.newFixedThreadPool(POOL_SIZE);
         int globalUsersCounter = counterService.getCounter().intValue();
-        executorServicePool.submit(new ServerThread(clientSocket, bank, counterService));
+        //executorServicePool.submit(new ServerThread(clientSocket, bank, counterService));
+        executorServicePool.execute(new ServerThread(clientSocket, bank, counterService));
     }
 
-    public static void main(String[] args) {
-        BankService bService = new BankServiceImpl();
-        Bank bank = BankServerThreaded.initialize(bService);
-        BankServerThreaded sb = new BankServerThreaded(bank);
-        sb.start();
-    }
+//    public static void main(String[] args) {
+//        BankService bService = new BankServiceImpl();
+//        Bank bank = BankServerThreaded.initialize(bService);
+//        BankServerThreaded sb = new BankServerThreaded(bank);
+//        sb.start();
+//    }
 
     //----------------------Temporary bank---------------------------------
     public static Bank initialize(BankService bService) {

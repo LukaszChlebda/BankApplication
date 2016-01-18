@@ -1,8 +1,11 @@
+
 import com.luxoft.bankapp.command_request.ClientCommander;
 import com.luxoft.bankapp.exceptions.ClientExistsException;
 import com.luxoft.bankapp.exceptions.ClientNotFoundException;
 import com.luxoft.bankapp.exceptions.NotEnoughtFundsException;
-import com.luxoft.bankapp.server.Request;
+import com.luxoft.bankapp.server.*;
+import com.luxoft.bankapp.service.AccountType;
+
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -23,39 +26,63 @@ public class BankClientMock implements Runnable{
 
     private ClientCommander clientCommander;
 
-    private float amount;
-    private String userName;
+    Request loginRequest, changeActiveAccountRequest,  withdrawRequest, logOutRequest;
 
-    public BankClientMock(String userName, float amount) {
-        this.amount = amount;
-        this.userName = userName;
+    public BankClientMock() {
+
     }
 
     public void run() {
-        while (true) {
+
+        synchronized (this) {
             try {
-                requestSocket = new Socket(SERVER, 2004);
-                System.out.println("Connected to the localhost ");
-                objectOutputStream = new ObjectOutputStream(requestSocket.getOutputStream());
-                objectOutputStream.flush();
-                objectInputStream = new ObjectInputStream(requestSocket.getInputStream());
-                clientCommander = new ClientCommander(message, objectOutputStream, objectInputStream);
-                message = (String) objectInputStream.readObject();
+                    requestSocket = new Socket(SERVER, 2004);
+                    System.out.println("Connected to the localhost ");
+                    objectOutputStream = new ObjectOutputStream(requestSocket.getOutputStream());
+                    objectOutputStream.flush();
+                    objectInputStream = new ObjectInputStream(requestSocket.getInputStream());
 
-                System.out.println(message);
+                    loginRequest = new LoginReguest("Lukasz");
+                    sendRequest(loginRequest);
+                    message = (String) objectInputStream.readObject();
+                    System.out.println(message);
 
-                do {
-                    serviceRequest();
-                } while (!message.equals("bye"));
+                    changeActiveAccountRequest = new ChangeActiveAccountRequest(AccountType.SAVING_ACCOUNT);
+                    sendRequest(changeActiveAccountRequest);
+                    message = (String) objectInputStream.readObject();
+                    System.out.println(message);
+
+                    withdrawRequest = new WithdrawRequest();
+                    ((WithdrawRequest) withdrawRequest).setAmountToWithdraw(1);
+                    sendRequest(withdrawRequest);
+                    message = (String) objectInputStream.readObject();
+
+                    logOutRequest = new LogoutRequest();
+                    sendRequest(logOutRequest);
+                    message = (String) objectInputStream.readObject();
+                    System.out.println(message);
+
             } catch (UnknownHostException e) {
                 e.printStackTrace();
             } catch (IOException e) {
                 e.printStackTrace();
             } catch (ClassNotFoundException e) {
                 e.printStackTrace();
+            } finally {
+                try {
+
+                    objectInputStream.close();
+                    objectOutputStream.close();
+                    requestSocket.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
             }
             }
         }
+
+
 
     public synchronized void serviceRequest() {
         try {
@@ -70,7 +97,7 @@ public class BankClientMock implements Runnable{
 
     }
 
-    public void sendRequest(Request request) {
+    public synchronized void sendRequest(Request request) {
         try {
             objectOutputStream.writeObject(request);
             objectOutputStream.flush();
@@ -80,7 +107,7 @@ public class BankClientMock implements Runnable{
         }
     }
 
-    public void sendMessage(String message) {
+    public synchronized void sendMessage(String message) {
         try {
             objectOutputStream.writeObject(message);
             objectOutputStream.flush();

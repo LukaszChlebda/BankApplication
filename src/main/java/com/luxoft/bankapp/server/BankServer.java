@@ -115,7 +115,7 @@ public class BankServer {
                 try {
                     objectInputStream.close();
                     objectOutputStream.close();
-                    providerSocket.close();
+                    //providerSocket.close();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

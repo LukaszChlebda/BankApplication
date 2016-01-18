@@ -54,7 +54,6 @@ public class ClientCommander {
                     @Override
                     public void execute() throws ClientNotFoundException, NotEnoughtFundsException, ClientExistsException {
                         logOutRequest = new LogOutRequestCommand(message, objectInputStream, objectOutputStream);
-
                         logOutRequest.execute();
 
                     }

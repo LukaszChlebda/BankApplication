@@ -8,10 +8,10 @@ import com.luxoft.bankapp.server.BankServer;
 import com.luxoft.bankapp.server.BankServerThreaded;
 
 public class BankApplication {
-
+	static BankService bService = new BankServiceImpl();
+	static Bank bank = BankApplication.initialize(bService);
 	public static void main(String[] args) throws NotEnoughtFundsException {
-        BankService bService = new BankServiceImpl();
-        Bank bank = BankApplication.initialize(bService);
+
 
 		BankServer bankServer = new BankServer(bank);
 
@@ -35,7 +35,7 @@ public class BankApplication {
 		Client client2 = new Client("Jarek","Krakow","Jarek@gmail.com","123456789", Gender.MALE,500);
         Client client3 = new Client("Przemek","Warszawa","przemo@gmail.com","123456789", Gender.MALE,200);
 
-		SavingAccount savingAccount = new SavingAccount(1000);
+		SavingAccount savingAccount = new SavingAccount(5000);
 		CheckingAccount checkingAccount = new CheckingAccount(1000);
 
         Bank bank = new Bank();
@@ -56,7 +56,7 @@ public class BankApplication {
 			System.out.println(e.getMessage());
 		}
 
-		Account savingAccount1 = new SavingAccount(1000);
+		Account savingAccount1 = new SavingAccount(2000);
 		Account checkingAccount1 = new CheckingAccount(1000,1000);
         bService.addAccount(client1,savingAccount1);
         bService.addAccount(client1, checkingAccount1);
@@ -104,4 +104,7 @@ public class BankApplication {
 		//bank.printReport();
 	}
 
+	public static Bank getBankInstance() {
+		return bank;
+	}
 }
