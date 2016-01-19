@@ -21,7 +21,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 /**
  * Created by LChlebda on 2016-01-12.
  */
-public class BankServerThreaded {
+public class BankServerThreaded implements Runnable{
 
 
     CounterService counterService = new CounterServiceImpl();
@@ -48,7 +48,7 @@ public class BankServerThreaded {
 
     }
 
-    public void start() {
+    public void run() {
         ServerSocket serverSocket = null;
         try {
             serverSocket = new ServerSocket(2004);

@@ -8,16 +8,26 @@ import com.luxoft.bankapp.server.BankServer;
 import com.luxoft.bankapp.server.BankServerThreaded;
 
 public class BankApplication {
-	static BankService bService = new BankServiceImpl();
-	static Bank bank = BankApplication.initialize(bService);
-	public static void main(String[] args) throws NotEnoughtFundsException {
 
+
+
+	static BankService bService = new BankServiceImpl();
+	static Bank bank;
+
+	public BankApplication() {
+		bank = BankApplication.initialize(bService);
+	}
+
+	public BankApplication(Bank bank) {
+		this.bank = bank;
+	}
+	public static void main(String[] args) throws NotEnoughtFundsException {
 
 		BankServer bankServer = new BankServer(bank);
 
 		//bankServer.run();
 		BankServerThreaded bankServerThreaded = new BankServerThreaded(bank);
-		bankServerThreaded.start();
+		//bankServerThreaded.start();
 
 //        printBankReport(bank);
 //        modifyBank(bank);

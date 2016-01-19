@@ -1,3 +1,4 @@
+package com.luxoft.bankapp.server;
 
 import com.luxoft.bankapp.command_request.ClientCommander;
 import com.luxoft.bankapp.exceptions.ClientExistsException;
@@ -105,6 +106,18 @@ public class BankClientMock implements Runnable{
         } catch (IOException ioException) {
             ioException.printStackTrace();
         }
+    }
+
+    public String getMessage() {
+        String message = null;
+        try {
+            message = (String) objectInputStream.readObject();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return message;
     }
 
     public synchronized void sendMessage(String message) {

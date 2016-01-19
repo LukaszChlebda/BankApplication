@@ -1,11 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="DataSourceManagerImpl" format="xml" hash="2646305245">
+  <component name="DataSourceManagerImpl" format="xml" hash="3898238608">
     <data-source source="LOCAL" name="H2 - test" uuid="b847bc3a-08bd-4d82-96b1-6fc06a152e5e">
       <driver-ref>h2.unified</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>org.h2.Driver</jdbc-driver>
       <jdbc-url>jdbc:h2:~/test</jdbc-url>
+    </data-source>
+    <data-source source="LOCAL" name="H2 - BankAppliactionDataBase" uuid="0ff0b631-1b3c-4e83-a2da-de56f4151a35">
+      <driver-ref>h2.unified</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>org.h2.Driver</jdbc-driver>
+      <jdbc-url>jdbc:h2:C:\Users\LChlebda\IdeaProjects\BankApplication\BankAppliactionDataBase</jdbc-url>
+      <default-dialect>MySQL</default-dialect>
     </data-source>
   </component>
 </project>
