@@ -17,12 +17,12 @@ public class Client implements Report, Serializable {
     private Gender gender;
 	private List<Account> accounts;
 	private Account activeAccount;
+	private int id;
 
     public Client(String name, Gender gender) {
         accounts = new ArrayList<>();
 		this.name = name;
         this.gender = gender;
-
     }
 
     public Client(String name, Gender gender, float initialOverdraft) {
@@ -30,7 +30,6 @@ public class Client implements Report, Serializable {
 		this.name = name;
         this.initialOverdraft = initialOverdraft;
         this.gender = gender;
-
     }
 
 	public Client(String name,String city, String email, String phoneNumber, Gender gender) {
@@ -57,6 +56,15 @@ public class Client implements Report, Serializable {
 //		accounts.add(savingAccount);
 //		accounts.add(checkingAccount);
 	}
+
+	public void setID(int id) {
+		this.id = id;
+	}
+
+	public int getId() {
+		return id;
+	}
+
 
 	private Account getAccount(String accountType) {
 		for (Account acc: accounts) {
@@ -102,11 +110,8 @@ public class Client implements Report, Serializable {
 	public boolean equals(Object o) {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
-
 		Client client = (Client) o;
-
 		return name.equals(client.name);
-
 	}
 
 	@Override

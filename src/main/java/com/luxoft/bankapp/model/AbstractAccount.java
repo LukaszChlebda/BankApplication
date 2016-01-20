@@ -7,12 +7,22 @@ import java.util.Map;
 
 public abstract class AbstractAccount implements Account {
 	private float balance;
+	private int id;
 
 	public AbstractAccount(){};
 
 	public AbstractAccount(float balance) throws IllegalArgumentException{
 		setBalance(balance);
 	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public int getId() {
+		return id;
+	}
+
 
 	@Override
 	public boolean equals(Object o) {

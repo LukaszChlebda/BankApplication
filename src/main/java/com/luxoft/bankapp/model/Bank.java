@@ -12,6 +12,8 @@ public class Bank implements Report {
 	private Set<Client> clients;
 	private Map<String, Client> mapOfClients;
 	private List<ClientRegistrationListener> registrationListener;
+	private int id;
+	private String name;
 	
 	public Bank() {
 		clients = new HashSet<>();
@@ -20,32 +22,33 @@ public class Bank implements Report {
 		registerEvent(new PrintClientListener());
 		registerEvent(new EmailNotificationListener());
 	}
+
+	public Bank(String name) {
+		super();
+		this.name = name;
+	}
 	
 	public Set<Client> getClients() {
 		return Collections.unmodifiableSet(clients);
 
 	}
-	
-	class PrintClientListener implements ClientRegistrationListener {
 
-		@Override
-		public void onClientAdded(Client client) {
-			mapOfClients.put(client.getName(), client);
-			System.out.println("Client " + client.getName() + " added ");
-		}
-		
-	}
-	
-	class EmailNotificationListener implements ClientRegistrationListener {
-
-		@Override
-		public void onClientAdded(Client client) {
-			System.out.println("Email for client " + client.getName() + " to be sent ");
-			
-		}
-		
+	public int getID() {
+		return id;
 	}
 
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getName() {
+		return name;
+	}
+	
 	public Map<String, Client> getMapOfClients() {
 		return mapOfClients;
 	}
@@ -53,19 +56,15 @@ public class Bank implements Report {
 	public List<ClientRegistrationListener> getListeners() {
         return registrationListener;
     }
-	
+
 	void registerEvent(ClientRegistrationListener actionListener) {
         registrationListener.add(actionListener);
     }
-
-//	public Client getClient(int index) throws ClientNotFoundException{
-//		return clients.get(index);
-//	}
-
+	
 	public boolean removeClient(Client client) {
 		return clients.remove(client);
 	}
-
+	
     public Client getClient(String name) throws ClientNotFoundException {
 	    boolean clientFoundFlag = false;
 
@@ -83,6 +82,10 @@ public class Bank implements Report {
 	    return null;
 
     }
+
+//	public Client getClient(int index) throws ClientNotFoundException{
+//		return clients.get(index);
+//	}
 
 	public void parseFeed(Map<String, String> feedMap) throws ClientExistsException {
 		String name = feedMap.get("name");
@@ -107,7 +110,7 @@ public class Bank implements Report {
 
 		client.parseFeed(feedMap);
 	}
-	
+
 	public void addClient(Bank bank, Client client) throws ClientExistsException{
 //		try {
 //            if (bank.getClients().indexOf(client) != -1) {
@@ -134,7 +137,27 @@ public class Bank implements Report {
 	@Override
 	public void printReport() {
 		clients.forEach(client -> client.printReport());
-		
+
+	}
+	
+	class PrintClientListener implements ClientRegistrationListener {
+
+		@Override
+		public void onClientAdded(Client client) {
+			mapOfClients.put(client.getName(), client);
+			System.out.println("Client " + client.getName() + " added ");
+		}
+
+	}
+
+	class EmailNotificationListener implements ClientRegistrationListener {
+
+		@Override
+		public void onClientAdded(Client client) {
+			System.out.println("Email for client " + client.getName() + " to be sent ");
+
+		}
+
 	}
 
 }
