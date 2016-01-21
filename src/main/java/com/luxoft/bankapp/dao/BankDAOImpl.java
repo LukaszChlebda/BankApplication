@@ -15,13 +15,16 @@ import java.sql.SQLException;
 public class BankDAOImpl extends BaseDAOImpl implements BankDAO{
     private Connection con;
 
+
+
+
     public Bank getBankByName(String name) throws DAOException, BankNotFoundException {
         Bank bank = new Bank(name);
-        String sql = "SELECT ID, NAME FROM BANK WHERE name=?";
+        String GET_BANK_BY_NAME_QUERY = "SELECT ID, NAME FROM BANK WHERE name=?";
         PreparedStatement stmt;
         try {
             openConnection();
-            stmt = con.prepareStatement(sql);
+            stmt = con.prepareStatement(GET_BANK_BY_NAME_QUERY);
             stmt.setString(1, name);
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
@@ -42,13 +45,14 @@ public class BankDAOImpl extends BaseDAOImpl implements BankDAO{
     @Override
     public void saveBank(Bank bank) throws DAOException {
         String bankName = bank.getName();
-        String INSERT_NEW_BANK_NAME_INTO_BANK_TABLE_QUERY_= "INSERT INTO BANK(NAME) VALUES (?)";
+        String INSERT_NEW_BANK_NAME_INTO_BANK_TABLE_QUERY= "INSERT INTO BANK(NAME) VALUES (?)";
         PreparedStatement stmt;
         try {
             openConnection();
-            stmt = con.prepareStatement(INSERT_NEW_BANK_NAME_INTO_BANK_TABLE_QUERY_);
+            stmt = con.prepareStatement(INSERT_NEW_BANK_NAME_INTO_BANK_TABLE_QUERY);
             stmt.setString(1, bankName);
-            ResultSet rs = stmt.executeQuery();
+            stmt.execute();
+            //ResultSet rs = stmt.executeQuery();
 
         } catch (SQLException e) {
             e.printStackTrace();

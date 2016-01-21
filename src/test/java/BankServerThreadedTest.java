@@ -72,7 +72,7 @@ public class BankServerThreadedTest {
         SavingAccount savingAccount = new SavingAccount(5000);
         CheckingAccount checkingAccount = new CheckingAccount(1000);
 
-        Bank bank = new Bank();
+        Bank bank = new Bank(2, "My Bank");
 
         try {
             bService.addClient(bank, client1);

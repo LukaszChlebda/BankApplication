@@ -19,6 +19,19 @@ public class Client implements Report, Serializable {
 	private Account activeAccount;
 	private int id;
 
+	public Client() {
+		accounts = new ArrayList<>();
+	}
+
+	public Client(int id, String name) {
+		this.id = id;
+		this.name = name;
+	}
+
+	public Client(String name) {
+		accounts = new ArrayList<>();
+		this.name = name;
+	}
     public Client(String name, Gender gender) {
         accounts = new ArrayList<>();
 		this.name = name;
@@ -57,7 +70,7 @@ public class Client implements Report, Serializable {
 //		accounts.add(checkingAccount);
 	}
 
-	public void setID(int id) {
+	public void setId(int id) {
 		this.id = id;
 	}
 
@@ -154,6 +167,36 @@ public class Client implements Report, Serializable {
     public String getClientSalutation () {
         return gender.getPrefix();
     }
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public void setPhoneNumber(String phoneNumber) {
+		this.phoneNumber = phoneNumber;
+	}
+
+	public void setCity(String city) {
+		this.city = city;
+	}
+
+	public void setGender(String gender) {
+		switch (gender) {
+			case "female":
+				this.gender = Gender.FEMALE;
+				break;
+			case "male":
+				this.gender = Gender.MALE;
+				break;
+			default:
+				break;
+		}
+
+	}
 	
 	@Override
 	public void printReport() {

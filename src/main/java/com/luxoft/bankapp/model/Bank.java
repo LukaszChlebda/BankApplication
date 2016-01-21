@@ -14,17 +14,32 @@ public class Bank implements Report {
 	private List<ClientRegistrationListener> registrationListener;
 	private int id;
 	private String name;
-	
+
 	public Bank() {
+
 		clients = new HashSet<>();
 		mapOfClients = new TreeMap<>();
 		registrationListener = new ArrayList<>();
 		registerEvent(new PrintClientListener());
 		registerEvent(new EmailNotificationListener());
 	}
-
+	
+	public Bank(int id) {
+		this.id = id;
+		clients = new HashSet<>();
+		mapOfClients = new TreeMap<>();
+		registrationListener = new ArrayList<>();
+		registerEvent(new PrintClientListener());
+		registerEvent(new EmailNotificationListener());
+	}
 	public Bank(String name) {
 		super();
+		this.name = name;
+	}
+
+	public Bank(int id, String name) {
+		super();
+		this.id = id;
 		this.name = name;
 	}
 	
@@ -33,7 +48,7 @@ public class Bank implements Report {
 
 	}
 
-	public int getID() {
+	public int getId() {
 		return id;
 	}
 

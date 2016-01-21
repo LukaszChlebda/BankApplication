@@ -1,6 +1,7 @@
 package com.luxoft.bankapp.dao;
 
 import com.luxoft.bankapp.exceptions.DAOException;
+import org.h2.jdbc.JdbcConnection;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -11,13 +12,17 @@ import java.sql.SQLException;
  */
 public class BaseDAOImpl implements BaseDAO{
 
-    private Connection con;
+    public Connection con = null;
+
+    public Connection getConnection() {
+        return con;
+    }
 
     @Override
     public Connection openConnection() throws DAOException {
         try {
             Class.forName("org.h2.Driver");
-            con = DriverManager.getConnection("jdbc:h2:~/bank",
+            con = DriverManager.getConnection("jdbc:h2:C:\\Users\\LChlebda\\IdeaProjects\\BankApplication\\BankAppliactionDataBase",
                     "sa",
                     ""
             );
