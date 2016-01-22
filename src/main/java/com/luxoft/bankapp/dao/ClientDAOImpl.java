@@ -5,7 +5,6 @@ import com.luxoft.bankapp.exceptions.ClientNotFoundException;
 import com.luxoft.bankapp.exceptions.DAOException;
 import com.luxoft.bankapp.model.Bank;
 import com.luxoft.bankapp.model.Client;
-import org.omg.CORBA.PRIVATE_MEMBER;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -15,15 +14,15 @@ import java.util.List;
 /**
  * Created by LChlebda on 2016-01-20.
  */
-public class ClientDAOImpl extends BaseDAOImpl implements ClientDAO{
+public class ClientDAOImpl extends BaseDAOImpl implements ClientDAO {
 
     private PreparedStatement preparedStatement = null;
 
-    private static final String GET_CLIENT_BY_NAME_AND_BANK_ID = "SELECT c.ID,  c.NAME,  c.NAME FROM CLIENT c " +
-            "INNER JOIN BANKS_CLIENTS bc ON c.ID = bc.CLIENT_ID " +
-            "WHERE c.NAME =? AND bc.BANK_ID=?;";
+    private static final String GET_CLIENT_BY_NAME_AND_BANK_QUERY = "SELECT c.ID, c.NAME, c.GENDER, c.EMAIL, b.NAME  FROM CLIENT c INNER JOIN "
+            + "BANK b INNER JOIN ACCOUNTS a on a.BANK_ID = b.ID WHERE b.NAME =? AND c.NAME =?";
 
-    private static final String GET_ALL_CLIENTS_FROM_CURRENT_BANK_QUERY = "SELECT c.ID, c.NAME FROM CLIENT c " +
+
+    private static final String GET_ALL_CLIENTS_FROM_CURRENT_BANK_QUERY = "SELECT c.ID, c.NAME, c.GENDER, c.EMAIL FROM CLIENT c " +
             "INNER JOIN BANKS_CLIENTS bc ON c.ID=bc.CLIENT_ID " +
             "WHERE bc.BANK_ID=?";
 
@@ -35,12 +34,13 @@ public class ClientDAOImpl extends BaseDAOImpl implements ClientDAO{
 
     @Override
     public Client getClientByName(Bank bank, String clientNameToSearch) throws DAOException, ClientNotFoundException {
+
         Client foundClient = new Client();
 
         openConnection();
 
         try {
-            preparedStatement = getConnection().prepareStatement(GET_CLIENT_BY_NAME_AND_BANK_ID);
+            preparedStatement = getConnection().prepareStatement(GET_CLIENT_BY_NAME_AND_BANK_QUERY);
             prepareFindClientStatement(bank, clientNameToSearch);
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
@@ -57,35 +57,43 @@ public class ClientDAOImpl extends BaseDAOImpl implements ClientDAO{
         return foundClient;
     }
 
+    private void prepareFindClientStatement(Bank bankToSearch, String nameOfTheClientToSearch) throws SQLException {
+        preparedStatement.setString(1, bankToSearch.getName());
+        preparedStatement.setString(2, nameOfTheClientToSearch);
+
+    }
+
     private void getClientDataFromDB(Client foundClient, ResultSet resultSet, int id) throws SQLException {
         foundClient.setId(id);
         String foundClientName = resultSet.getString("NAME");
         foundClient.setName(foundClientName);
+        String foundClientGender = resultSet.getString("GENDER");
+        foundClient.setGender(foundClientGender);
+        String foundClientEmail = resultSet.getString("EMAIL");
+        foundClient.setEmail(foundClientEmail);
     }
 
-    private void prepareFindClientStatement(Bank bankToSearch, String nameOfTheClientToSearch) throws SQLException {
-        preparedStatement.setString(1, nameOfTheClientToSearch);
-        preparedStatement.setInt(2, bankToSearch.getId());
-    }
 
     @Override
     public List<Client> getAllClients(Bank bank) throws DAOException {
+
         List<Client> listOfClient = null;
         openConnection();
+
         try {
             preparedStatement = getConnection().prepareStatement(GET_ALL_CLIENTS_FROM_CURRENT_BANK_QUERY);
             prepareBankStatement(bank);
             ResultSet allClientsOfTheGivenBankResultSet = preparedStatement.executeQuery();
 
-            while(allClientsOfTheGivenBankResultSet.next()) {
+            while (allClientsOfTheGivenBankResultSet.next()) {
                 Client clientToAdd = new Client(allClientsOfTheGivenBankResultSet.getString("NAME"));
                 clientToAdd.setId(allClientsOfTheGivenBankResultSet.getInt("ID"));
                 clientToAdd.setName(allClientsOfTheGivenBankResultSet.getString("NAME"));
                 listOfClient.add(clientToAdd);
             }
-        }catch (SQLException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
-        }finally {
+        } finally {
             closeConnection();
         }
         return listOfClient;
@@ -102,44 +110,44 @@ public class ClientDAOImpl extends BaseDAOImpl implements ClientDAO{
             preparedStatement = getConnection().prepareStatement(SAVE_CLIENT_QUERY);
             prepareSaveClientStatement(clientToSave);
             int affectedRows = preparedStatement.executeUpdate();
-            if(affectedRows < 1) {
+            if (affectedRows < 1) {
                 throw new ClientExistsException(clientToSave);
             }
         } catch (SQLException e) {
             e.printStackTrace();
         } catch (ClientExistsException e) {
             e.printStackTrace();
-        }finally {
+        } finally {
             closeConnection();
         }
     }
 
-    private void prepareSaveClientStatement(Client clientToSave) throws SQLException{
+    private void prepareSaveClientStatement(Client clientToSave) throws SQLException {
         preparedStatement.setString(1, clientToSave.getName());
     }
 
     @Override
     public void remove(Client clientToRemove) throws DAOException {
         openConnection();
-        try{
+        try {
             preparedStatement = getConnection().prepareStatement(DELETE_BANKS_CLIENTS_QUERY);
             prepareDeleteBanksClientsStatement(clientToRemove);
             int affectedRows = preparedStatement.executeUpdate();
-            if(affectedRows < 1) {
+            if (affectedRows < 1) {
                 throw new ClientNotFoundException(clientToRemove.getName());
             }
 
             preparedStatement = getConnection().prepareStatement(DELETE_CLIENT_QUERY);
             prepareDeleteClientStatement(clientToRemove);
             affectedRows = preparedStatement.executeUpdate();
-            if(affectedRows < 1) {
+            if (affectedRows < 1) {
                 throw new ClientNotFoundException(clientToRemove.getName());
             }
-        }catch (SQLException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
-        }catch (ClientNotFoundException e) {
+        } catch (ClientNotFoundException e) {
             System.out.println(e.getMessage());
-        }finally {
+        } finally {
             closeConnection();
         }
     }
@@ -148,7 +156,7 @@ public class ClientDAOImpl extends BaseDAOImpl implements ClientDAO{
         preparedStatement.setString(1, clientToDelete.getName());
     }
 
-    private void prepareDeleteClientStatement(Client clientToDelete) throws SQLException{
+    private void prepareDeleteClientStatement(Client clientToDelete) throws SQLException {
         preparedStatement.setInt(1, clientToDelete.getId());
     }
 }

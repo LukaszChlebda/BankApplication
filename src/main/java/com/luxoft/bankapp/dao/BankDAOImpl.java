@@ -1,5 +1,7 @@
 package com.luxoft.bankapp.dao;
 
+import com.luxoft.bankapp.exceptions.BankException;
+import com.luxoft.bankapp.exceptions.BankExistException;
 import com.luxoft.bankapp.exceptions.BankNotFoundException;
 import com.luxoft.bankapp.exceptions.DAOException;
 import com.luxoft.bankapp.model.Bank;
@@ -13,18 +15,21 @@ import java.sql.SQLException;
  * Created by LChlebda on 2016-01-20.
  */
 public class BankDAOImpl extends BaseDAOImpl implements BankDAO{
-    private Connection con;
 
+    private final String INSERT_NEW_BANK_NAME_INTO_BANK_TABLE_QUERY = "INSERT INTO BANK(NAME) VALUES (?)";
+    private final String GET_BANK_BY_NAME_QUERY = "SELECT ID, NAME FROM BANK WHERE name=?";
+    private final String REMOVE_BANK_BY_NAME_QUERY = "DELETE FROM BANK WHERE name=?";
 
-
+    private PreparedStatement preparedStatement;
 
     public Bank getBankByName(String name) throws DAOException, BankNotFoundException {
         Bank bank = new Bank(name);
-        String GET_BANK_BY_NAME_QUERY = "SELECT ID, NAME FROM BANK WHERE name=?";
+        openConnection();
+
         PreparedStatement stmt;
         try {
             openConnection();
-            stmt = con.prepareStatement(GET_BANK_BY_NAME_QUERY);
+            stmt = getConnection().prepareStatement(GET_BANK_BY_NAME_QUERY);
             stmt.setString(1, name);
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
@@ -45,25 +50,38 @@ public class BankDAOImpl extends BaseDAOImpl implements BankDAO{
     @Override
     public void saveBank(Bank bank) throws DAOException {
         String bankName = bank.getName();
-        String INSERT_NEW_BANK_NAME_INTO_BANK_TABLE_QUERY= "INSERT INTO BANK(NAME) VALUES (?)";
-        PreparedStatement stmt;
         try {
-            openConnection();
-            stmt = con.prepareStatement(INSERT_NEW_BANK_NAME_INTO_BANK_TABLE_QUERY);
-            stmt.setString(1, bankName);
-            stmt.execute();
-            //ResultSet rs = stmt.executeQuery();
-
+            preparedStatement = getConnection().prepareStatement(INSERT_NEW_BANK_NAME_INTO_BANK_TABLE_QUERY);
+            preparedStatement.setString(1, bank.getName());
+            int affectedRows = preparedStatement.executeUpdate();
+            if(affectedRows <1) {
+                throw new BankExistException(bank);
+            }
         } catch (SQLException e) {
             e.printStackTrace();
-            throw new DAOException();
-        } finally {
-            closeConnection();
+        } catch (BankExistException e) {
+            e.printStackTrace();
         }
     }
 
     @Override
     public void removeBank(Bank bank) throws DAOException {
-
+        openConnection();
+        PreparedStatement stmt;
+        try {
+            stmt = getConnection().prepareStatement(REMOVE_BANK_BY_NAME_QUERY);
+            stmt.setString(1, bank.getName());
+            int affectedRows = stmt.executeUpdate();
+            if(affectedRows < 1) {
+                throw new BankNotFoundException(bank.getName());
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new DAOException();
+        } catch (BankNotFoundException e) {
+            e.printStackTrace();
+        } finally {
+            closeConnection();
+        }
     }
 }

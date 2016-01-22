@@ -22,7 +22,7 @@ public class BaseDAOImpl implements BaseDAO{
     public Connection openConnection() throws DAOException {
         try {
             Class.forName("org.h2.Driver");
-            con = DriverManager.getConnection("jdbc:h2:C:\\Users\\LChlebda\\IdeaProjects\\BankApplication\\BankAppliactionDataBase",
+            con = DriverManager.getConnection("jdbc:h2:C:\\Users\\LChlebda\\IdeaProjects\\BankApplication\\BankAppliactionDB",
                     "sa",
                     ""
             );
