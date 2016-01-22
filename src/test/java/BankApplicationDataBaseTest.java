@@ -12,7 +12,10 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
+import static junit.framework.Assert.assertNotNull;
 import static junit.framework.Assert.assertNull;
 import static junit.framework.TestCase.assertEquals;
 
@@ -69,6 +72,29 @@ public class BankApplicationDataBaseTest {
 //        assertEquals(null, getClient);
 //    }
 
+
+    @Test
+    public void getAllClientsTest() {
+        ClientDAO clientDAO = new ClientDAOImpl();
+        Bank bank = new Bank("UBS");
+        List<Client> listOfClientsToGet = new ArrayList<>();
+        List<Client> listOfClientsTemp = new ArrayList<>();
+
+        listOfClientsTemp.add(new Client("Lukasz"));
+        listOfClientsTemp.add(new Client("Marek"));
+
+        try {
+            listOfClientsToGet = clientDAO.getAllClients(bank);
+        } catch (DAOException e) {
+            e.printStackTrace();
+        }
+
+
+        assertNotNull(listOfClientsTemp);
+        assertEquals(listOfClientsTemp, listOfClientsToGet);
+
+    }
+
     @Test
     public void getClientFromDBTest() {
         Bank bank = new Bank("UBS");
@@ -99,6 +125,7 @@ public class BankApplicationDataBaseTest {
         assertEquals(bankToCheck.getName(), getBank.getName());
     }
 
+    @Test
     public void saveBankTest() {
         Bank bankToSave = new Bank("mBank");
         Bank tempBank = null;
@@ -110,13 +137,14 @@ public class BankApplicationDataBaseTest {
         } catch (DAOException e) {
             e.printStackTrace();
         } catch (BankNotFoundException e) {
-            e.printStackTrace();
+            System.out.printf(e.getMessage());
         }
 
         assertEquals(bankToSave.getName(), tempBank.getName());
         assertNull(bankNull);
     }
 
+    @Test
     public void removeBankTest() {
         Bank bankToRemove = new Bank("Ubuntu");
         Bank bankTemp1 = null;

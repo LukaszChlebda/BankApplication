@@ -9,6 +9,7 @@ import com.luxoft.bankapp.model.Client;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -22,9 +23,7 @@ public class ClientDAOImpl extends BaseDAOImpl implements ClientDAO {
             + "BANK b INNER JOIN ACCOUNTS a on a.BANK_ID = b.ID WHERE b.NAME =? AND c.NAME =?";
 
 
-    private static final String GET_ALL_CLIENTS_FROM_CURRENT_BANK_QUERY = "SELECT c.ID, c.NAME, c.GENDER, c.EMAIL FROM CLIENT c " +
-            "INNER JOIN BANKS_CLIENTS bc ON c.ID=bc.CLIENT_ID " +
-            "WHERE bc.BANK_ID=?";
+    private static final String GET_ALL_CLIENTS_FROM_CURRENT_BANK_QUERY = "SELECT c.ID, c.NAME, c.GENDER, c.EMAIL, b.NAME FROM CLIENT c Inner JOIN ACCOUNTS On  ACCOUNTS.ID=c.ACCOUNT_ID Join BANK b on ACCOUNTS.BANK_ID = b.ID WHERE b.NAME = ?";
 
     private static final String SAVE_CLIENT_QUERY = "INSERT INTO CLIENT(NAME) VALUES(?)";
 
@@ -77,7 +76,7 @@ public class ClientDAOImpl extends BaseDAOImpl implements ClientDAO {
     @Override
     public List<Client> getAllClients(Bank bank) throws DAOException {
 
-        List<Client> listOfClient = null;
+        List<Client> listOfClient = new ArrayList<>();
         openConnection();
 
         try {
@@ -87,8 +86,16 @@ public class ClientDAOImpl extends BaseDAOImpl implements ClientDAO {
 
             while (allClientsOfTheGivenBankResultSet.next()) {
                 Client clientToAdd = new Client(allClientsOfTheGivenBankResultSet.getString("NAME"));
+
+                int id = allClientsOfTheGivenBankResultSet.getInt("ID");
+                getClientDataFromDB(clientToAdd, allClientsOfTheGivenBankResultSet, id);
+
+
                 clientToAdd.setId(allClientsOfTheGivenBankResultSet.getInt("ID"));
                 clientToAdd.setName(allClientsOfTheGivenBankResultSet.getString("NAME"));
+
+
+                getClientDataFromDB(clientToAdd, allClientsOfTheGivenBankResultSet, id);
                 listOfClient.add(clientToAdd);
             }
         } catch (SQLException e) {
@@ -100,7 +107,7 @@ public class ClientDAOImpl extends BaseDAOImpl implements ClientDAO {
     }
 
     private void prepareBankStatement(Bank bank) throws SQLException {
-        preparedStatement.setInt(1, bank.getId());
+        preparedStatement.setString(1, bank.getName());
     }
 
     @Override

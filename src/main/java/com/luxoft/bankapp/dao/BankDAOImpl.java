@@ -50,6 +50,7 @@ public class BankDAOImpl extends BaseDAOImpl implements BankDAO{
     @Override
     public void saveBank(Bank bank) throws DAOException {
         String bankName = bank.getName();
+        openConnection();
         try {
             preparedStatement = getConnection().prepareStatement(INSERT_NEW_BANK_NAME_INTO_BANK_TABLE_QUERY);
             preparedStatement.setString(1, bank.getName());
@@ -67,11 +68,10 @@ public class BankDAOImpl extends BaseDAOImpl implements BankDAO{
     @Override
     public void removeBank(Bank bank) throws DAOException {
         openConnection();
-        PreparedStatement stmt;
         try {
-            stmt = getConnection().prepareStatement(REMOVE_BANK_BY_NAME_QUERY);
-            stmt.setString(1, bank.getName());
-            int affectedRows = stmt.executeUpdate();
+            preparedStatement = getConnection().prepareStatement(REMOVE_BANK_BY_NAME_QUERY);
+            preparedStatement.setString(1, bank.getName());
+            int affectedRows = preparedStatement.executeUpdate();
             if(affectedRows < 1) {
                 throw new BankNotFoundException(bank.getName());
             }
