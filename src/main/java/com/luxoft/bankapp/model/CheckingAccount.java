@@ -25,6 +25,8 @@ public class CheckingAccount extends AbstractAccount implements Serializable{
 	}
 
     private float overdraft;
+	private int bankId;
+	private int clientId;
 
 	@Override
 	public boolean equals(Object o) {
@@ -52,7 +54,27 @@ public class CheckingAccount extends AbstractAccount implements Serializable{
         return toString();
     }
 
-    @Override
+	@Override
+	public void setClientID(int id) {
+		this.clientId = id;
+	}
+
+	@Override
+	public int getClientId() {
+		return clientId;
+	}
+
+	@Override
+	public int getBankId() {
+		return bankId;
+	}
+
+	@Override
+	public void setBanId(int id) {
+		this.bankId = id;
+	}
+
+	@Override
 	public void decimalValue() {
 		System.out.println(Math.round(getBalance()));
 		
@@ -102,4 +124,5 @@ public class CheckingAccount extends AbstractAccount implements Serializable{
 	public String getAccountType() {
 		return "c";
 	}
+
 }

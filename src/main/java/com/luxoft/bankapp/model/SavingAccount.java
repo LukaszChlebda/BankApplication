@@ -6,6 +6,8 @@ import java.io.Serializable;
 
 public class SavingAccount extends AbstractAccount implements Serializable{
     private Object monitor = new Object();
+    private int bankId;
+    private int clientId;
     public SavingAccount(){};
 	
 	public SavingAccount(float balance){
@@ -15,7 +17,27 @@ public class SavingAccount extends AbstractAccount implements Serializable{
     public String getAccountInfo() {
         return toString();
     }
-    
+
+    @Override
+    public void setClientID(int id) {
+        this.clientId = id;
+    }
+
+    @Override
+    public int getClientId() {
+        return getClientId();
+    }
+
+    @Override
+    public int getBankId() {
+        return getBankId();
+    }
+
+    @Override
+    public void setBanId(int id) {
+        this.bankId = id;
+    }
+
     @Override
 	public void decimalValue() {
 		System.out.println(Math.round(getBalance()));
@@ -36,6 +58,11 @@ public class SavingAccount extends AbstractAccount implements Serializable{
                 throw new NotEnoughtFundsException(this, amount);
             }
         }
+    }
+
+    @Override
+    public void setOverdraft(float overdraft) {
+
     }
 
     public void printReport() {

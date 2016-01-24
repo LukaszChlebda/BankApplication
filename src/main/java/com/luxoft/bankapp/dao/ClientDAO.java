@@ -13,7 +13,7 @@ import java.util.List;
 public interface ClientDAO {
     public Client getClientByName(Bank bank, String name) throws DAOException, ClientNotFoundException;
     public List<Client> getAllClients(Bank bank) throws DAOException;
-    public void save(Client client) throws DAOException;
+    public void save(Bank bank, Client client) throws DAOException;
     public void remove(Client client) throws DAOException;
 
 

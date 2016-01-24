@@ -19,6 +19,11 @@ public class Client implements Report, Serializable {
 	private Account activeAccount;
 	private int id;
 
+
+
+	private int bankId;
+	private int accountId;
+
 	public Client() {
 		accounts = new ArrayList<>();
 	}
@@ -38,7 +43,15 @@ public class Client implements Report, Serializable {
         this.gender = gender;
     }
 
-    public Client(String name, Gender gender, float initialOverdraft) {
+	public Client(String name, Gender gender, String email) {
+		accounts = new ArrayList<>();
+		this.name = name;
+		this.gender = gender;
+		this.email = email;
+	}
+
+
+	public Client(String name, Gender gender, float initialOverdraft) {
         accounts = new ArrayList<>();
 		this.name = name;
         this.initialOverdraft = initialOverdraft;
@@ -70,6 +83,22 @@ public class Client implements Report, Serializable {
 //		accounts.add(checkingAccount);
 	}
 
+	public int getBankId() {
+		return bankId;
+	}
+
+	public void setBankId(int bankId) {
+		this.bankId = bankId;
+	}
+
+	public int getAccountId() {
+		return accountId;
+	}
+
+	public void setAccountId(int accountId) {
+		this.accountId = accountId;
+	}
+
 	public void setId(int id) {
 		this.id = id;
 	}
@@ -78,6 +107,9 @@ public class Client implements Report, Serializable {
 		return id;
 	}
 
+	public String getGender() {
+		return gender.toString();
+	}
 
 	private Account getAccount(String accountType) {
 		for (Account acc: accounts) {

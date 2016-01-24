@@ -12,7 +12,9 @@ import java.sql.SQLException;
  */
 public class BaseDAOImpl implements BaseDAO{
 
-    public Connection con = null;
+    private Connection con = null;
+    private String databasePathHome = "jdbc:h2:C:\\Users\\Łukasz\\IdeaProjects\\BankApplication\\BankAppliactionDB";
+    private String databasePathWork = "jdbc:h2:C:\\Users\\LChlebda\\IdeaProjects\\BankApplication\\BankAppliactionDB";
 
     public Connection getConnection() {
         return con;
@@ -22,7 +24,7 @@ public class BaseDAOImpl implements BaseDAO{
     public Connection openConnection() throws DAOException {
         try {
             Class.forName("org.h2.Driver");
-            con = DriverManager.getConnection("jdbc:h2:C:\\Users\\LChlebda\\IdeaProjects\\BankApplication\\BankAppliactionDB",
+            con = DriverManager.getConnection(databasePathHome,
                     "sa",
                     ""
             );

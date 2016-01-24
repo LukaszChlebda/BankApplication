@@ -6,11 +6,14 @@ import com.luxoft.bankapp.model.Client;
  * Created by LChlebda on 2015-12-17.
  */
 public class ClientNotFoundException extends Throwable{
-    String name;
-    String message = "Client " + name + " does not exist in database ";
+    String message;
+
+    public ClientNotFoundException(){
+        message = "Client does not exist in database ";
+    }
 
     public ClientNotFoundException(String name) {
-        this.name  = name;
+        message = "Client " + name + " does not exist in database ";
     }
 
     @Override

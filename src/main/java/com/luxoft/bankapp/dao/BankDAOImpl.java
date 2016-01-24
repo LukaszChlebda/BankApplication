@@ -35,6 +35,7 @@ public class BankDAOImpl extends BaseDAOImpl implements BankDAO{
             if (rs.next()) {
                 int id  = rs.getInt("ID");
                 bank.setId(id);
+                bank.setName(name);
             } else {
                 throw new BankNotFoundException(name);
             }

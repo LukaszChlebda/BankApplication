@@ -1,17 +1,17 @@
+import com.luxoft.bankapp.DBComands.DBBankCommander;
 import com.luxoft.bankapp.dao.BankDAO;
 import com.luxoft.bankapp.dao.BankDAOImpl;
 import com.luxoft.bankapp.dao.ClientDAO;
-import com.luxoft.bankapp.dao.ClientDAOImpl;
+import com.luxoft.bankapp.dao.ClientDaoImpl;
 import com.luxoft.bankapp.exceptions.BankNotFoundException;
 import com.luxoft.bankapp.exceptions.ClientNotFoundException;
 import com.luxoft.bankapp.exceptions.DAOException;
 import com.luxoft.bankapp.model.Bank;
 import com.luxoft.bankapp.model.Client;
-import org.junit.Assert;
+import com.luxoft.bankapp.service.Gender;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,47 +35,47 @@ public class BankApplicationDataBaseTest {
         bank = new Bank(1, "MyBank");
 
         getClientFromDataBase = null;
-        clientDAO = new ClientDAOImpl();
+        clientDAO = new ClientDaoImpl();
         clientName = "Lukasz";
         clientToSave = new Client(clientName);
         bankDAO = new BankDAOImpl();
     }
 
-//    @Test
-//    public void saveClientToDBTest() {
-//
-//        try {
-//            clientDAO.save(clientToSave);
-//            getClientFromDataBase = clientDAO.getClientByName(bank, clientName);
-//        }catch (DAOException e) {
-//            e.printStackTrace();
-//        } catch (ClientNotFoundException e) {
-//            e.printStackTrace();
-//        }
-//
-//        assertEquals(clientName, clientToSave.getName());
-//    }
-//
-//    @Test
-//    public void deleteClientFromDBTest() {
-//        Client clientToRemove = new Client(1, "Lukasz");
-//        Client getClient = null;
-//        try {
-//            clientDAO.remove(clientToRemove);
-//            getClient = clientDAO.getClientByName(bank, clientName);
-//        } catch (DAOException e) {
-//            e.printStackTrace();
-//        } catch (ClientNotFoundException e) {
-//            e.printStackTrace();
-//        }
-//
-//        assertEquals(null, getClient);
-//    }
+    @Test
+    public void saveClientToDBTest() {
+        clientToSave = new Client("Kamil", Gender.MALE, "kamil@gmail.com");
+        try {
+            clientDAO.save(DBBankCommander.activeBank, clientToSave);
+            getClientFromDataBase = clientDAO.getClientByName(bank, clientName);
+        }catch (DAOException e) {
+            e.printStackTrace();
+        } catch (ClientNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        assertEquals(getClientFromDataBase, clientToSave.getName());
+    }
+
+    @Test
+    public void deleteClientFromDBTest() {
+        Client clientToRemove = new Client(1, "Lukasz");
+        Client getClient = null;
+        try {
+            clientDAO.remove(clientToRemove);
+            getClient = clientDAO.getClientByName(bank, clientName);
+        } catch (DAOException e) {
+            e.printStackTrace();
+        } catch (ClientNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        assertEquals(null, getClient);
+    }
 
 
     @Test
     public void getAllClientsTest() {
-        ClientDAO clientDAO = new ClientDAOImpl();
+        ClientDAO clientDAO = new ClientDaoImpl();
         Bank bank = new Bank("UBS");
         List<Client> listOfClientsToGet = new ArrayList<>();
         List<Client> listOfClientsTemp = new ArrayList<>();
@@ -152,7 +152,7 @@ public class BankApplicationDataBaseTest {
 
         try {
             bankDAO.saveBank(bankToRemove);
-            bankTemp1 = bankDAO.getBankByName("ubuntu");
+            bankTemp1 = bankDAO.getBankByName("Ubuntu");
         } catch (DAOException e) {
             e.printStackTrace();
         } catch (BankNotFoundException e) {
@@ -161,8 +161,9 @@ public class BankApplicationDataBaseTest {
 
         assertEquals(bankToRemove.getName(), bankTemp1.getName());
 
+
         try {
-            bankDAO.saveBank(bankToRemove);
+            bankDAO.removeBank(bankTemp1);
             bankTemp2 = bankDAO.getBankByName("Ubuntu");
         } catch (DAOException e) {
             e.printStackTrace();

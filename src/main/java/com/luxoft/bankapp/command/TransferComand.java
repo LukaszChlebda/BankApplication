@@ -112,7 +112,6 @@ public class TransferComand implements Command{
 							System.out.println("Transfer succeed");
 							flag = false;
 						}
-
 					}
 				}
 			}
