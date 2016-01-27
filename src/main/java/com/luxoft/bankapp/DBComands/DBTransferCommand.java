@@ -9,6 +9,8 @@ import com.luxoft.bankapp.exceptions.NotEnoughtFundsException;
 import com.luxoft.bankapp.model.Client;
 
 import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Created by LChlebda on 2016-01-25.
@@ -18,6 +20,7 @@ public class DBTransferCommand implements Command {
     private Scanner userInput = new Scanner(System.in);
     private ClientDaoImpl clientDAO = new ClientDaoImpl();
     private float balanceBeforeWithdraw = 0, balanceAfterWithdraw = 0;
+    private Logger log = Logger.getLogger(DBTransferCommand.class.getName());
 
     @Override
     public void execute() throws ClientNotFoundException, NotEnoughtFundsException, ClientExistsException {
@@ -31,26 +34,10 @@ public class DBTransferCommand implements Command {
                 System.out.println("Client id "  + DBBankCommander.clientToTransfer.getId() );
                 DBBankCommander.clientToTransfer.addAccounts(clientDAO.getClientAccounts(DBBankCommander.clientToTransfer.getId()));
             } catch (DAOException e) {
+                log.log(Level.SEVERE, e.getMessage(), e);
                 e.printStackTrace();
             }
 
-            //DBBankCommander.activeBank.getClient(userToTransfer);
-
-//            System.out.println("Choose account \n0 saving account \n1 checking account ");
-//
-//            userToTransfer = userInput.next();
-//
-//            switch (userToTransfer) {
-//                case "0":
-//                    DBBankCommander.clientToTransfer.setActiveAccount(DBBankCommander.clientToTransfer.getAccounts().get(0));
-//                    break;
-//                case "1":
-//                    DBBankCommander.clientToTransfer.setActiveAccount(DBBankCommander.clientToTransfer.getAccounts().get(1));
-//                    break;
-//                default:
-//                    System.out.printf("No such option ");
-//                    break;
-//            }
             setActiveAccount(DBBankCommander.clientToTransfer);
 
             System.out.println("Enter amount: ");
@@ -64,6 +51,7 @@ public class DBTransferCommand implements Command {
                 DBBankCommander.clientToTransfer.getActiveAccount().deposit(Float.valueOf(userToTransfer));
                 clientDAO.add(DBBankCommander.clientToTransfer.getActiveAccount(), DBBankCommander.clientToTransfer.getId());
             } catch (DAOException | NotEnoughtFundsException e) {
+                log.log(Level.SEVERE, e.getMessage(), e);
                 e.printStackTrace();
             }
 

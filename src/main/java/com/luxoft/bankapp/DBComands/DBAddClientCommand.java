@@ -30,10 +30,7 @@ public class DBAddClientCommand implements Command {
                 clientDAO.save(DBBankCommander.activeBank, clientToAdd);
 
                 DBBankCommander.activeClient = clientToAdd;
-                //DBBankCommander.activeBank.addClient(DBBankCommander.activeBank, DBBankCommander.activeClient);
-
                 DBBankCommander.activeClient.addAccounts(clientDao.getClientAccounts(clientToAdd.getId()));
-
 
             } catch (DAOException e) {
                 e.getMessage();

@@ -8,6 +8,7 @@ import com.luxoft.bankapp.exceptions.DAOException;
 import com.luxoft.bankapp.exceptions.NotEnoughtFundsException;
 
 import java.util.Scanner;
+import java.util.logging.Logger;
 
 /**
  * Created by Łukasz on 24.01.2016.
@@ -15,6 +16,7 @@ import java.util.Scanner;
 public class DBDepositCommand implements Command {
     private Scanner userInput = new Scanner(System.in);
     private ClientDaoImpl clientDAO = new ClientDaoImpl();
+    private Logger log = Logger.getLogger(DBDepositCommand.class.getName());
     @Override
     public void execute() throws ClientNotFoundException, NotEnoughtFundsException, ClientExistsException {
         if(DBBankCommander.isActiveClientChoosen(DBBankCommander.activeClient)) {

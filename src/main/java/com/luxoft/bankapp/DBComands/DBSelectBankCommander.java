@@ -7,12 +7,13 @@ import com.luxoft.bankapp.dao.ClientDaoImpl;
 import com.luxoft.bankapp.exceptions.*;
 
 import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Created by Łukasz on 24.01.2016.
  */
 public class DBSelectBankCommander implements Command {
-
 
     @Override
     public void execute() throws ClientNotFoundException, NotEnoughtFundsException, ClientExistsException {
@@ -28,9 +29,8 @@ public class DBSelectBankCommander implements Command {
             for(int i=0;i<DBBankCommander.activeBank.getClients().size(); i++) {
                 DBBankCommander.activeBank.getClients().get(i).addAccounts(clientDAO.getClientAccounts(DBBankCommander.activeBank.getClients().get(i).getId()));
             }
-
         }catch (BankNotFoundException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         } catch (DAOException e) {
             e.printStackTrace();
         }
