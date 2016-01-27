@@ -24,7 +24,7 @@ public class BaseDAOImpl implements BaseDAO{
     public Connection openConnection() throws DAOException {
         try {
             Class.forName("org.h2.Driver");
-            con = DriverManager.getConnection(databasePathHome,
+            con = DriverManager.getConnection(databasePathWork,
                     "sa",
                     ""
             );

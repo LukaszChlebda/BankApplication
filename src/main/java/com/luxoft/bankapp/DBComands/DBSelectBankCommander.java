@@ -3,7 +3,6 @@ package com.luxoft.bankapp.DBComands;
 import com.luxoft.bankapp.command.Command;
 import com.luxoft.bankapp.dao.BankDAO;
 import com.luxoft.bankapp.dao.BankDAOImpl;
-import com.luxoft.bankapp.dao.ClientDAO;
 import com.luxoft.bankapp.dao.ClientDaoImpl;
 import com.luxoft.bankapp.exceptions.*;
 
@@ -18,14 +17,18 @@ public class DBSelectBankCommander implements Command {
     @Override
     public void execute() throws ClientNotFoundException, NotEnoughtFundsException, ClientExistsException {
         BankDAO bankDao = new BankDAOImpl();
-        ClientDAO clientDAO = new ClientDaoImpl();
+        ClientDaoImpl clientDAO = new ClientDaoImpl();
         Scanner userInput = new Scanner(System.in);
         System.out.println("Enter bank name ");
 
         try {
             DBBankCommander.activeBank = bankDao.getBankByName(userInput.next());
-            DBBankCommander.listOfAllClients = clientDAO.getAllClients(DBBankCommander.activeBank);
-            System.out.println(DBBankCommander.listOfAllClients);
+            DBBankCommander.activeBank.addClients(clientDAO.getAllClients(DBBankCommander.activeBank));
+
+            for(int i=0;i<DBBankCommander.activeBank.getClients().size(); i++) {
+                DBBankCommander.activeBank.getClients().get(i).addAccounts(clientDAO.getClientAccounts(DBBankCommander.activeBank.getClients().get(i).getId()));
+            }
+
         }catch (BankNotFoundException e) {
             System.out.println(e.getMessage());
         } catch (DAOException e) {

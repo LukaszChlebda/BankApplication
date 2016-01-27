@@ -184,6 +184,10 @@ public class Client implements Report, Serializable {
 		accounts.add(accountToAdd);
 	}
 
+	public void addAccounts(List<Account> accounts) {
+		this.accounts = accounts;
+	}
+
 	public List<Account> getAccounts() {
 		return Collections.unmodifiableList(accounts);
 	}

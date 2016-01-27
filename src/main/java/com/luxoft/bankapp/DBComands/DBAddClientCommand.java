@@ -16,6 +16,7 @@ import java.util.Scanner;
  */
 public class DBAddClientCommand implements Command {
 
+    private ClientDaoImpl clientDao = new ClientDaoImpl();
     private Scanner  userInput = new Scanner(System.in);
     @Override
     public void execute() throws ClientNotFoundException, NotEnoughtFundsException, ClientExistsException {
@@ -27,6 +28,13 @@ public class DBAddClientCommand implements Command {
             Client clientToAdd = new Client(name, gender, email);
             try {
                 clientDAO.save(DBBankCommander.activeBank, clientToAdd);
+
+                DBBankCommander.activeClient = clientToAdd;
+                //DBBankCommander.activeBank.addClient(DBBankCommander.activeBank, DBBankCommander.activeClient);
+
+                DBBankCommander.activeClient.addAccounts(clientDao.getClientAccounts(clientToAdd.getId()));
+
+
             } catch (DAOException e) {
                 e.getMessage();
             }

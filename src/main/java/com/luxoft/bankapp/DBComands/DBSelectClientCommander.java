@@ -5,9 +5,7 @@ import com.luxoft.bankapp.dao.ClientDAO;
 import com.luxoft.bankapp.dao.ClientDaoImpl;
 import com.luxoft.bankapp.exceptions.ClientExistsException;
 import com.luxoft.bankapp.exceptions.ClientNotFoundException;
-import com.luxoft.bankapp.exceptions.DAOException;
 import com.luxoft.bankapp.exceptions.NotEnoughtFundsException;
-import com.luxoft.bankapp.model.Bank;
 
 import java.util.Scanner;
 
@@ -20,11 +18,12 @@ public class DBSelectClientCommander implements Command {
     private Scanner userInput = new Scanner(System.in);
     @Override
     public void execute() throws ClientNotFoundException, NotEnoughtFundsException, ClientExistsException {
-        if(activeBankChoosen(DBBankCommander.activeBank)) {
-
+        if(DBBankCommander.activeBankChoosen(DBBankCommander.activeBank)) {
+            System.out.println("Enter client name ");
             try {
-                DBBankCommander.activeClient = clientDao.getClientByName(DBBankCommander.activeBank, userInput.next());
-            } catch (ClientNotFoundException | DAOException e) {
+//                DBBankCommander.clientToTransfer = clientDao.getClientByName(DBBankCommander.activeBank, userInput.next());
+                DBBankCommander.activeClient = DBBankCommander.activeBank.getClient(userInput.next());
+            } catch (ClientNotFoundException e) {
                 System.out.println(e.getMessage());
             }
         }else {
@@ -37,10 +36,5 @@ public class DBSelectClientCommander implements Command {
         System.out.println("Select client ");
     }
 
-    private boolean activeBankChoosen(Bank bankToCheck ) {
-        if(bankToCheck !=null) {
-            return true;
-        }
-        return false;
-    }
+
 }

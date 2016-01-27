@@ -6,6 +6,7 @@ import com.luxoft.bankapp.model.Bank;
 import com.luxoft.bankapp.model.Client;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by LChlebda on 2016-01-20.

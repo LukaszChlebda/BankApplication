@@ -1,23 +1,28 @@
 package com.luxoft.bankapp.model;
 
+import com.luxoft.bankapp.Annotation.*;
 import com.luxoft.bankapp.service.*;
 import com.luxoft.bankapp.exceptions.*;
 import com.sun.org.apache.xpath.internal.SourceTree;
+import com.sun.xml.internal.bind.v2.schemagen.xmlschema.Annotation;
 
 import java.util.*;
 
 
 public class Bank implements Report {
 
-	private Set<Client> clients;
+	@NoDB
+	private List<Client> clients;
+	@NoDB
 	private Map<String, Client> mapOfClients;
+	@NoDB
 	private List<ClientRegistrationListener> registrationListener;
-	private int id;
+	@NoDB public int id;
 	private String name;
 
 	public Bank() {
 
-		clients = new HashSet<>();
+		clients = new ArrayList<>();
 		mapOfClients = new TreeMap<>();
 		registrationListener = new ArrayList<>();
 		registerEvent(new PrintClientListener());
@@ -26,7 +31,7 @@ public class Bank implements Report {
 	
 	public Bank(int id) {
 		this.id = id;
-		clients = new HashSet<>();
+		clients = new ArrayList<>();
 		mapOfClients = new TreeMap<>();
 		registrationListener = new ArrayList<>();
 		registerEvent(new PrintClientListener());
@@ -43,8 +48,8 @@ public class Bank implements Report {
 		this.name = name;
 	}
 	
-	public Set<Client> getClients() {
-		return Collections.unmodifiableSet(clients);
+	public List<Client> getClients() {
+		return Collections.unmodifiableList(clients);
 
 	}
 
@@ -92,11 +97,14 @@ public class Bank implements Report {
 	    }
 	    if(!clientFoundFlag) {
 		    throw new ClientNotFoundException(name);
-			//return null;
 	    }
 	    return null;
 
     }
+
+	public void addClients(List<Client> listOfClients) {
+		this.clients  = listOfClients;
+	}
 
 //	public Client getClient(int index) throws ClientNotFoundException{
 //		return clients.get(index);

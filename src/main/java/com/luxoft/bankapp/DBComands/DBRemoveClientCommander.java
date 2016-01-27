@@ -7,7 +7,6 @@ import com.luxoft.bankapp.exceptions.ClientExistsException;
 import com.luxoft.bankapp.exceptions.ClientNotFoundException;
 import com.luxoft.bankapp.exceptions.DAOException;
 import com.luxoft.bankapp.exceptions.NotEnoughtFundsException;
-import com.luxoft.bankapp.model.Client;
 
 import java.util.Scanner;
 
@@ -21,14 +20,17 @@ public class DBRemoveClientCommander implements Command {
 
     @Override
     public void execute() throws ClientNotFoundException, NotEnoughtFundsException, ClientExistsException {
-        if(isActiveClientChoosen(DBBankCommander.activeClient)) {
+        if(DBBankCommander.activeBankChoosen(DBBankCommander.activeBank)) {
+            System.out.printf("Enter client name ");
             try {
                 clientDAO.remove(clientDAO.getClientByName(DBBankCommander.activeBank, userInput.next()));
             } catch (DAOException | ClientNotFoundException e) {
                 e.printStackTrace();
+            } finally {
+
             }
         }else {
-            new DBRemoveClientCommander();
+            new DBSelectBankCommander().execute();
         }
     }
 
@@ -37,10 +39,5 @@ public class DBRemoveClientCommander implements Command {
         System.out.println("Remove client from DB");
     }
 
-    private boolean isActiveClientChoosen(Client client) {
-        if(client != null) {
-            return true;
-        }
-        return false;
-    }
+
 }
