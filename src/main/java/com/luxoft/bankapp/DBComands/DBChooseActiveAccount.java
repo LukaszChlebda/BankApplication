@@ -33,9 +33,11 @@ public class DBChooseActiveAccount implements Command {
         switch (input) {
             case "0":
                 DBBankCommander.activeClient.setActiveAccount(DBBankCommander.activeClient.getAccounts().get(0));
+                DBBankCommander.getLogger().fine("Chosen account type " + DBBankCommander.activeClient.getAccounts().get(0).getAccountType());
                 break;
             case "1":
                 DBBankCommander.activeClient.setActiveAccount(DBBankCommander.activeClient.getAccounts().get(1));
+                DBBankCommander.getLogger().fine("Chosen account type " + DBBankCommander.activeClient.getAccounts().get(0).getAccountType());
                 break;
             default:
                 break;

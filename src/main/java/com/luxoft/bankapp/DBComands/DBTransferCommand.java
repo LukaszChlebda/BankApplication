@@ -51,7 +51,7 @@ public class DBTransferCommand implements Command {
                 DBBankCommander.clientToTransfer.getActiveAccount().deposit(Float.valueOf(userToTransfer));
                 clientDAO.add(DBBankCommander.clientToTransfer.getActiveAccount(), DBBankCommander.clientToTransfer.getId());
             } catch (DAOException | NotEnoughtFundsException e) {
-                log.log(Level.SEVERE, e.getMessage(), e);
+                DBBankCommander.getLogger().warning(e.getMessage());
                 e.printStackTrace();
             }
 

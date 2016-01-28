@@ -33,6 +33,7 @@ public class DBAddClientCommand implements Command {
                 DBBankCommander.activeClient.addAccounts(clientDao.getClientAccounts(clientToAdd.getId()));
 
             } catch (DAOException e) {
+                DBBankCommander.getLogger().warning(e.getMessage());
                 e.getMessage();
             }
         } else {

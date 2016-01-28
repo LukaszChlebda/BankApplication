@@ -25,13 +25,12 @@ public class DBSelectBankCommander implements Command {
         try {
             DBBankCommander.activeBank = bankDao.getBankByName(userInput.next());
             DBBankCommander.activeBank.addClients(clientDAO.getAllClients(DBBankCommander.activeBank));
-
+            DBBankCommander.getLogger().fine("Logged in bank " + DBBankCommander.activeBank.getName());
             for(int i=0;i<DBBankCommander.activeBank.getClients().size(); i++) {
                 DBBankCommander.activeBank.getClients().get(i).addAccounts(clientDAO.getClientAccounts(DBBankCommander.activeBank.getClients().get(i).getId()));
             }
-        }catch (BankNotFoundException e) {
-            e.printStackTrace();
-        } catch (DAOException e) {
+        }catch (DAOException | BankNotFoundException e) {
+            DBBankCommander.getLogger().warning(e.getMessage());
             e.printStackTrace();
         }
     }

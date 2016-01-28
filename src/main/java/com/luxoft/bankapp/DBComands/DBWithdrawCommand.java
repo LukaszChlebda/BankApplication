@@ -19,7 +19,6 @@ public class DBWithdrawCommand implements Command{
     private Scanner userInput = new Scanner(System.in);
     private float amountToWithdraw;
     private ClientDaoImpl clientDao = new ClientDaoImpl();
-    private Logger log = Logger.getLogger(DBWithdrawCommand.class.getName());
 
     @Override
     public void execute() throws ClientNotFoundException, NotEnoughtFundsException, ClientExistsException {
@@ -27,16 +26,13 @@ public class DBWithdrawCommand implements Command{
             new DBChooseActiveAccount().execute();
             System.out.println("Enter amount to withdraw ") ;
             amountToWithdraw = userInput.nextFloat();
-
-
             try {
                 DBBankCommander.activeClient.getActiveAccount().withdraw(amountToWithdraw);
                 clientDao.add(DBBankCommander.activeClient.getActiveAccount(), DBBankCommander.activeClient.getId());
             } catch (DAOException | NotEnoughtFundsException e) {
-                log.log(Level.SEVERE, e.getMessage(), e);
+                DBBankCommander.getLogger().warning(e.getMessage());
                 e.getMessage();
             }
-
         }else {
             new DBSelectClientCommander().execute();
         }

@@ -18,15 +18,15 @@ public class DBSelectClientCommander implements Command {
     private boolean activebankChoosen = false;
     private ClientDAO clientDao = new ClientDaoImpl();
     private Scanner userInput = new Scanner(System.in);
-    private Logger log = Logger.getLogger(DBSelectClientCommander.class.getName());
     @Override
     public void execute() throws ClientNotFoundException, NotEnoughtFundsException, ClientExistsException {
         if(DBBankCommander.activeBankChoosen(DBBankCommander.activeBank)) {
             System.out.println("Enter client name ");
             try {
                 DBBankCommander.activeClient = DBBankCommander.activeBank.getClient(userInput.next());
+                DBBankCommander.getLogger().fine("Client chosen " + DBBankCommander.activeClient.getName());
             } catch (ClientNotFoundException e) {
-                log.log(Level.SEVERE, e.getMessage(), e);
+                DBBankCommander.getLogger().warning(e.getMessage());
                 e.getMessage();
             }
         }else {

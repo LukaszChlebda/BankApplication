@@ -9,8 +9,7 @@ import com.luxoft.bankapp.exceptions.DAOException;
 import com.luxoft.bankapp.exceptions.NotEnoughtFundsException;
 
 import java.util.Scanner;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.logging.*;
 
 /**
  * Created by Łukasz on 24.01.2016.
@@ -19,7 +18,6 @@ public class DBRemoveClientCommander implements Command {
 
     private ClientDAO clientDAO = new ClientDaoImpl();
     private Scanner userInput = new Scanner(System.in);
-    private Logger log = Logger.getLogger(DBRemoveClientCommander.class.getName());
     private String name;
 
 
@@ -31,7 +29,7 @@ public class DBRemoveClientCommander implements Command {
             try {
                 clientDAO.remove(clientDAO.getClientByName(DBBankCommander.activeBank, name));
             } catch (DAOException | ClientNotFoundException e) {
-                //log.log(Level.SEVERE, e.getMessage(), e);
+                DBBankCommander.getLogger().warning(e.getMessage());
                 e.printStackTrace();
             }
         }else {
@@ -43,6 +41,4 @@ public class DBRemoveClientCommander implements Command {
     public void printCommandInfo() {
         System.out.println("Remove client from DB");
     }
-
-
 }

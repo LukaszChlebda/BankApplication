@@ -29,6 +29,7 @@ public class DBDepositCommand implements Command {
                 try {
                     clientDAO.add(DBBankCommander.activeClient.getActiveAccount(), DBBankCommander.activeClient.getId());
                 } catch (DAOException e) {
+                    DBBankCommander.getLogger().warning(e.getMessage());
                     e.printStackTrace();
                 }
             }else {

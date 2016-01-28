@@ -22,7 +22,6 @@ public class BankDAOImpl extends BaseDAOImpl implements BankDAO{
     private final String GET_BANK_BY_NAME_QUERY = "SELECT ID, NAME FROM BANK WHERE name=?";
     private final String REMOVE_BANK_BY_NAME_QUERY = "DELETE FROM BANK WHERE name=?";
 
-    private Logger log = Logger.getLogger(BankDAOImpl.class.getName());
     private PreparedStatement preparedStatement;
 
     public Bank getBankByName(String name) throws DAOException, BankNotFoundException {
@@ -43,7 +42,6 @@ public class BankDAOImpl extends BaseDAOImpl implements BankDAO{
                 throw new BankNotFoundException(name);
             }
         } catch (SQLException e) {
-            log.log(Level.SEVERE, e.getMessage(), e);
             e.printStackTrace();
             throw new DAOException();
         } finally {
